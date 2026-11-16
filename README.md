@@ -12,7 +12,18 @@ Your marks are saved in your own browser, on that device only. Nobody else who o
 
 ## How it was built
 
-- **Top 50:** each book is ranked by how many of five must-read lists include it: Medium's "Ultimate List", College Transitions, Reedsy, Pan Macmillan and Books of Brilliance. Ties were broken by rank on TheGreatestBooks.org.
+The top 50 are the books that appear most often across these five must-read lists. Each card shows how many of the five include it ("on 4 of 5 lists").
+
+1. [100 Books to Read Before You Die: Creating the Ultimate List](https://medium.com/@joelapatrick/creating-the-ultimate-list-100-books-to-read-before-you-die-45f1b722b2e5), Medium (itself a merge of eight lists: The Guardian, BBC Big Read, Amazon, Harvard Book Store, Modern Library, Time, The Telegraph and The Art of Manliness)
+2. [101 Books to Read Before You Die](https://www.collegetransitions.com/blog/books-to-read-before-you-die/), College Transitions (2024)
+3. [100 Books to Read Before You Die](https://reedsy.com/discovery/blog/best-books-to-read-in-a-lifetime), Reedsy Discovery
+4. [Must reads: 50 best books of all time](https://www.panmacmillan.com/blogs/general/must-read-books-of-all-time), Pan Macmillan (2026)
+5. [Top 30 Must-Read Books for Every Bibliophile](https://booksofbrilliance.com/2026/08/15/30-books-to-read-before-you-die/), Books of Brilliance (2026)
+
+Ties were broken by rank on [TheGreatestBooks.org](https://thegreatestbooks.org/), which aggregates hundreds of "best of" lists.
+
+The other books were added as reads like *This Cursed Beautiful Land*, books by Nobel laureates and other thinkers, or personal picks.
+
 - **Genre, difficulty, adaptation verdicts and topics** are editorial judgements. Page counts are approximate and vary by edition. Years are first publication in the original language.
 
 ## Editing

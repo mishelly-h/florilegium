@@ -203,7 +203,14 @@ svg .bg{fill:transparent}
 .empty{padding:48px 16px;text-align:center;color:var(--muted)}
 .empty b{display:block;font:650 1.2rem var(--f-display);color:var(--ink);margin-bottom:6px}
 mark{background:var(--blush);color:var(--ox-deep);border-radius:2px;padding:0 1px}
-.foot{margin-top:24px;font-size:.78rem;color:var(--muted)}
+.srclink{color:var(--band-ink);text-decoration:underline;text-decoration-color:var(--band-muted);text-underline-offset:3px;white-space:nowrap}
+.site-foot{margin-top:40px;border-top:1px solid var(--line)}
+.site-foot .inner{padding-block:24px 8px;display:grid;gap:10px;font-size:.86rem;color:var(--muted);max-width:1180px}
+.site-foot h2{font:650 1.05rem/1.2 var(--f-display);color:var(--ink);margin:0}
+.site-foot p{margin:0;max-width:75ch}
+.site-foot ol{margin:0;padding-left:1.3em;display:grid;gap:4px;max-width:75ch}
+.site-foot a{color:var(--ox-text);text-underline-offset:3px}
+.site-foot .src{color:var(--muted)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -211,7 +218,7 @@ mark{background:var(--blush);color:var(--ox-deep);border-radius:2px;padding:0 1p
     <div>
       <h1>Florilegium</h1>
       <p class="kicker">Must-Read Shelf</p>
-      <p class="sub">Books worth reading next, and when the film will do.</p>
+      <p class="sub">Books worth reading next, and when the film will do. <a class="srclink" href="#sources" id="srclink">Where the list comes from</a></p>
     </div>
     <div class="tally" aria-live="polite">
       <div><b id="t-all">68</b><span>Books</span></div>
@@ -244,7 +251,6 @@ mark{background:var(--blush);color:var(--ox-deep);border-radius:2px;padding:0 1p
 
   <div class="gut"><div class="inner"><main id="grid" class="grid" aria-label="Books"></main>
   <div id="empty" class="empty" hidden><b>No books match</b>Try fewer filters or a different search.<br><button class="linkbtn" id="reset2" type="button">Clear all</button></div>
-  <p class="foot">Adaptation verdicts summarise how critics received each film or series and how closely it follows the book. Years are first publication, in the original language. Page counts are approximate and vary by edition.</p>
 </div></div>
 </div>
 
@@ -259,6 +265,19 @@ mark{background:var(--blush);color:var(--ox-deep);border-radius:2px;padding:0 1p
   <div id="tbooks" class="tbooks" hidden><h3 id="tbooks-h"></h3></div>
   <div class="grid" id="tgrid" aria-label="Books for this topic"></div>
 </div></div></div>
+
+<footer id="sources" class="gut site-foot"><div class="inner">
+    <h2>Where the list comes from</h2>
+    <p>The top 50 are the books that appear most often across these five must-read lists. Ties are broken by rank on <a href="https://thegreatestbooks.org/" target="_blank" rel="noopener">TheGreatestBooks.org</a>, which combines hundreds of "best of" lists.</p>
+    <ol>
+      <li><a href="https://medium.com/@joelapatrick/creating-the-ultimate-list-100-books-to-read-before-you-die-45f1b722b2e5" target="_blank" rel="noopener">100 Books to Read Before You Die: Creating the Ultimate List</a> <span class="src">· Medium · itself a merge of eight lists: The Guardian, BBC Big Read, Amazon, Harvard Book Store, Modern Library, Time, The Telegraph and The Art of Manliness</span></li>
+      <li><a href="https://www.collegetransitions.com/blog/books-to-read-before-you-die/" target="_blank" rel="noopener">101 Books to Read Before You Die</a> <span class="src">· College Transitions · 2024</span></li>
+      <li><a href="https://reedsy.com/discovery/blog/best-books-to-read-in-a-lifetime" target="_blank" rel="noopener">100 Books to Read Before You Die</a> <span class="src">· Reedsy Discovery</span></li>
+      <li><a href="https://www.panmacmillan.com/blogs/general/must-read-books-of-all-time" target="_blank" rel="noopener">Must reads: 50 best books of all time</a> <span class="src">· Pan Macmillan · 2026</span></li>
+      <li><a href="https://booksofbrilliance.com/2026/08/15/30-books-to-read-before-you-die/" target="_blank" rel="noopener">Top 30 Must-Read Books for Every Bibliophile</a> <span class="src">· Books of Brilliance · 2026</span></li>
+    </ol>
+    <p>The other books were added as reads like <i>This Cursed Beautiful Land</i>, books by Nobel laureates and other thinkers, or personal picks. Genres, difficulty, topics and the film verdicts are editorial judgements. Years are first publication, in the original language. Page counts are approximate and vary by edition.</p>
+  </div></footer>
 
 <script>
 const BOOKS = __BOOKS__;
@@ -569,6 +588,7 @@ function showView(){
   $("v-map").hidden=!map; $("v-shelf").hidden=map;
   $("tab-map").setAttribute("aria-selected",map); $("tab-shelf").setAttribute("aria-selected",!map);
 }
+$("srclink").addEventListener("click",e=>{ e.preventDefault(); $("sources").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}); });
 $("tab-shelf").onclick=()=>{ location.hash="shelf"; };
 $("tab-map").onclick=()=>{ location.hash="topics"; };
 window.addEventListener("hashchange",()=>{ showView(); });
