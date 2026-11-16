@@ -37,9 +37,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .inner{max-width:1180px;margin:0 auto}
 .band{background:var(--band);color:var(--band-ink)}
 .band .inner{padding-block:30px 26px;display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px 28px}
-.eyebrow{font:500 .68rem/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--band-muted);margin:0 0 10px}
 h1{font:650 clamp(1.9rem,4.4vw,2.7rem)/1.05 var(--f-display);margin:0;letter-spacing:-.01em;text-wrap:balance}
-.sub{color:var(--band-muted);margin:8px 0 0;max-width:58ch}
+.kicker{font:500 italic clamp(1.05rem,2vw,1.25rem)/1.2 var(--f-display);color:var(--band-ink);margin:6px 0 0;opacity:.9}
+.sub{color:var(--band-muted);margin:10px 0 0;max-width:58ch}
 .tally{display:flex;gap:22px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
 .tally div{display:flex;flex-direction:column}
 .tally b{font:650 1.6rem/1 var(--f-display)}
@@ -209,9 +209,9 @@ mark{background:var(--blush);color:var(--ox-deep);border-radius:2px;padding:0 1p
 
 <header class="band gut"><div class="inner">
     <div>
-      <p class="eyebrow" id="eyebrow">68 books</p>
       <h1>Florilegium</h1>
-      <p class="sub">A must-read shelf: the 50 books that show up most on must-read lists, plus picks like <i>This Cursed Beautiful Land</i>, Nobel laureates, great thinkers and your own picks.</p>
+      <p class="kicker">Must-Read Shelf</p>
+      <p class="sub">Books worth reading next, and when the film will do.</p>
     </div>
     <div class="tally" aria-live="polite">
       <div><b id="t-all">68</b><span>Books</span></div>
@@ -419,7 +419,6 @@ function renderGrid(){
 function update(){ lsSet(LS_UI,ui); syncDropdowns(); renderPills(); renderGrid(); counts(); }
 
 buildDropdowns();
-$("eyebrow").textContent=`${BOOKS.length} books · ${BOOKS.filter(b=>b.nobel).length} Nobel laureates · ${BOOKS.filter(b=>b.tags.includes("Your picks")).length} of your picks`;
 $("q").value=ui.q;
 $("q").addEventListener("input",e=>{ui.q=e.target.value; lsSet(LS_UI,ui); renderGrid();});
 $("qclear").onclick=()=>{ui.q="";$("q").value="";$("q").focus();update();};
