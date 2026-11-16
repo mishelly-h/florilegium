@@ -405,7 +405,7 @@ function card(b){
   const bars=[1,2,3,4,5].map(i=>`<i class="${i<=b.difficulty?"on":""}"></i>`).join("");
   const none=b.screen==="None"||b.screen==="None released";
   el.innerHTML=`
-    <div class="cat"><span>${b.rank?`No. ${String(b.rank).padStart(2,"0")}`:"Added pick"}</span><span>${b.lists?`on ${b.lists} of 5 lists`:""}</span></div>
+    <div class="cat"><span>${b.rank?`No. ${String(b.rank).padStart(2,"0")}`:"Added picks"}</span><span>${b.lists?`on ${b.lists} of 5 lists`:""}</span></div>
     <div class="tags">${tags}</div>
     <h2>${title}</h2>
     <div class="author">${hl(b.author)}</div>
