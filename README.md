@@ -2,7 +2,7 @@
 
 *Florilegium* is medieval Latin for a hand-picked anthology of the best texts, literally "a gathering of flowers." This one is a must-read shelf.
 
-A personal reading shelf: the 50 books that appear most often on "must-read" lists, plus books like *This Cursed Beautiful Land*, Nobel laureates, other great thinkers, and my own picks. That's 74 books in all.
+A personal reading shelf: the 50 books that appear most often on "must-read" lists, plus books like *This Cursed Beautiful Land*, Nobel laureates, other great thinkers, and my own picks. That's 73 books in all.
 
 **Shelf tab:** search across titles, authors, topics, films and Nobel fields. Filter by why a book is on the list, topic, difficulty, length, publication date, screen adaptation or shelf. Mark each book as read, watched, favourite or "not right now".
 
