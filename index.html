@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Must-Read Shelf</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,650&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: a library catalogue — an oxblood masthead band, a slim sticky filter row, then a grid of white catalogue cards.
+   Palette from the user: oxblood #6A2226, olive #848058, blush #F4E1D5 — blush as accent, not as the ground. */
+:root{
+  --bg:#f8f5f2; --surface:#ffffff; --ink:#2a1517; --muted:#6f5f5c; --line:#eadfd8; --hover:#fbf3ee;
+  --oxblood:#6a2226; --ox-text:#6a2226; --ox-deep:#4e171a; --blush:#f4e1d5; --blush-soft:#f8ebe2;
+  --olive:#848058; --olive-strong:#6c6946; --olive-text:#5d5a3a; --olive-soft:#eeecdc;
+  --later:#8b7d79; --later-soft:#efe9e6;
+  --band:#6a2226; --band-ink:#f4e1d5; --band-muted:rgba(244,225,213,.72);
+  --shadow:0 12px 32px rgba(78,23,26,.16);
+  --f-display:"Literata", Georgia, "Times New Roman", serif;
+  --f-body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#151011; --surface:#1f1718; --ink:#f4e1d5; --muted:#b9a39d; --line:#352729; --hover:#281d1f;
+  --oxblood:#8c2e33; --ox-text:#ea9f99; --ox-deep:#6a2226; --blush:#f4e1d5; --blush-soft:#3a2427;
+  --olive:#a6a173; --olive-strong:#848058; --olive-text:#cfca9f; --olive-soft:#2e2c1d;
+  --later:#a8938e; --later-soft:#2c2224;
+  --band:#5a1c20; --band-ink:#f4e1d5; --band-muted:rgba(244,225,213,.7); --shadow:0 12px 32px rgba(0,0,0,.5); color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#151011; --surface:#1f1718; --ink:#f4e1d5; --muted:#b9a39d; --line:#352729; --hover:#281d1f;
+  --oxblood:#8c2e33; --ox-text:#ea9f99; --ox-deep:#6a2226; --blush:#f4e1d5; --blush-soft:#3a2427;
+  --olive:#a6a173; --olive-strong:#848058; --olive-text:#cfca9f; --olive-soft:#2e2c1d;
+  --later:#a8938e; --later-soft:#2c2224;
+  --band:#5a1c20; --band-ink:#f4e1d5; --band-muted:rgba(244,225,213,.7); --shadow:0 12px 32px rgba(0,0,0,.5); color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:10;background:var(--band)}
+.gut{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.inner{max-width:1180px;margin:0 auto}
+.band{background:var(--band);color:var(--band-ink)}
+.band .inner{padding-block:30px 26px;display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px 28px}
+.eyebrow{font:500 .68rem/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--band-muted);margin:0 0 10px}
+h1{font:650 clamp(1.9rem,4.4vw,2.7rem)/1.05 var(--f-display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+.sub{color:var(--band-muted);margin:8px 0 0;max-width:58ch}
+.tally{display:flex;gap:22px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.tally div{display:flex;flex-direction:column}
+.tally b{font:650 1.6rem/1 var(--f-display)}
+.tally span{font:500 .64rem/1.4 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--band-muted);margin-top:5px}
+
+.bar{position:sticky;top:env(safe-area-inset-top, 0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar .inner{padding-block:12px 10px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.search{flex:1 1 260px;min-width:0;position:relative;display:block}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
+#q{width:100%;font:inherit;font-size:16px;padding:9px 34px 9px 36px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink)}
+#q:focus{border-color:var(--oxblood)}
+#qclear{position:absolute;right:4px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--muted);cursor:pointer;padding:6px 8px;border-radius:6px;font-size:18px;line-height:1}
+:focus-visible{outline:2px solid var(--ox-text);outline-offset:2px}
+
+.dd{position:relative}
+.dd>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font:500 .86rem/1 var(--f-body);padding:10px 11px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);white-space:nowrap;user-select:none}
+.dd>summary:hover{background:var(--hover)}
+.dd>summary::-webkit-details-marker{display:none}
+.dd>summary .ct{font:500 .7rem/1 var(--f-mono);background:var(--oxblood);color:var(--blush);border-radius:999px;padding:3px 6px}
+.dd>summary svg{color:var(--muted);transition:transform .15s}
+.dd.on>summary{border-color:var(--oxblood);color:var(--ox-text)}
+.dd[open]>summary{border-color:var(--oxblood)}
+.dd[open]>summary svg{transform:rotate(180deg)}
+.panel{position:absolute;top:calc(100% + 6px);left:0;z-index:20;min-width:230px;max-width:min(320px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:6px}
+.dd.right .panel{left:auto;right:0}
+.opt{display:flex;align-items:center;gap:10px;padding:8px 9px;border-radius:7px;cursor:pointer;font-size:.88rem}
+.opt:hover{background:var(--blush-soft)}
+.opt input{accent-color:var(--oxblood);width:16px;height:16px;margin:0;flex:none}
+.opt .n{margin-left:auto;color:var(--muted);font:500 .72rem/1 var(--f-mono);font-variant-numeric:tabular-nums}
+.panel hr{border:0;border-top:1px solid var(--line);margin:4px 2px}
+@media (max-width:560px){ .dd{position:static} #dds{position:relative} .panel{left:0;right:0;max-width:none;top:100%;margin-top:6px} }
+
+.status{display:flex;justify-content:space-between;align-items:center;gap:8px 12px;flex-wrap:wrap;margin-top:8px;font-size:.84rem;color:var(--muted)}
+.active{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.pill{font:500 .78rem/1 var(--f-body);display:inline-flex;align-items:center;gap:6px;padding:5px 7px 5px 10px;border-radius:999px;background:var(--oxblood);color:var(--blush);border:0;cursor:pointer}
+.pill span{font-size:14px;line-height:1;opacity:.75}
+.linkbtn{border:0;background:none;color:var(--ox-text);font:inherit;font-weight:600;cursor:pointer;padding:2px 0}
+.save{font:500 .68rem/1 var(--f-mono);letter-spacing:.04em}
+
+main.inner{display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:16px;margin-top:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 16px 12px;display:flex;flex-direction:column;gap:8px;min-width:0;transition:opacity .15s, box-shadow .15s}
+.card:hover{box-shadow:0 4px 18px rgba(78,23,26,.08)}
+.card.later{opacity:.5}
+.card.later:hover,.card.later:focus-within{opacity:1}
+.card.fav{border-color:var(--oxblood)}
+.cat{display:flex;justify-content:space-between;gap:8px;font:500 .68rem/1.3 var(--f-mono);letter-spacing:.05em;color:var(--ox-text);font-variant-numeric:tabular-nums}
+.cat span+span{color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font:600 .69rem/1 var(--f-body);padding:4px 7px;border-radius:5px;background:var(--blush);color:var(--ox-deep)}
+.tag.t-nobel{background:var(--oxblood);color:var(--blush)}
+.tag.t-like{background:var(--olive-strong);color:#fff}
+.tag.t-mine{background:var(--ink);color:var(--bg)}
+.tag.t-thought{background:transparent;border:1px solid var(--olive);color:var(--olive-text);padding:3px 6px}
+.card h2{font:650 1.2rem/1.25 var(--f-display);margin:2px 0 0;text-wrap:balance}
+.card h2 a{color:inherit;text-decoration-color:var(--line);text-underline-offset:3px}
+.card h2 a:hover{color:var(--ox-text)}
+.author{color:var(--muted);margin-top:-4px}
+.nobel{font-size:.82rem;color:var(--ox-text);font-weight:600;display:flex;gap:6px;align-items:center}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.diff{display:inline-flex;align-items:center;gap:6px}
+.bars{display:inline-flex;gap:2px;align-items:flex-end}
+.bars i{display:block;width:5px;border-radius:1px;background:var(--line)}
+.bars i:nth-child(1){height:6px}.bars i:nth-child(2){height:8px}.bars i:nth-child(3){height:10px}.bars i:nth-child(4){height:12px}.bars i:nth-child(5){height:14px}
+.bars i.on{background:var(--olive)}
+.about{margin:0;max-width:65ch}
+.screen{font-size:.84rem;color:var(--muted);display:flex;gap:6px}
+.screen svg{flex:none;margin-top:3px}
+.actions{display:flex;gap:6px;margin-top:auto;padding-top:10px;border-top:1px solid var(--line);flex-wrap:wrap}
+.act{font:500 .8rem/1 var(--f-body);border:1px solid var(--line);background:transparent;color:var(--muted);padding:7px 10px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.act:hover{color:var(--ink);background:var(--hover)}
+.act[data-k="read"][aria-pressed="true"]{background:var(--olive-strong);border-color:var(--olive-strong);color:#fff}
+.act[data-k="fav"][aria-pressed="true"]{background:var(--oxblood);border-color:var(--oxblood);color:var(--blush)}
+.act[data-k="fav"][aria-pressed="true"] svg path{fill:currentColor}
+.act[data-k="later"][aria-pressed="true"]{background:var(--later-soft);border-color:var(--later);color:var(--later)}
+.film{background:var(--bg);border-radius:9px;padding:10px 11px;display:flex;flex-direction:column;gap:7px}
+.film .ft{font-size:.84rem;font-weight:600;display:flex;gap:6px;align-items:flex-start}
+.film .ft svg{flex:none;margin-top:3px;color:var(--muted)}
+.film .also{font-weight:400;color:var(--muted)}
+.badges{display:flex;flex-wrap:wrap;gap:5px}
+.bd{font:600 .68rem/1 var(--f-body);padding:4px 7px;border-radius:5px;border:1px solid var(--line);color:var(--muted);background:var(--surface)}
+.bd b{font-weight:500;opacity:.75;margin-right:3px}
+.bd.c-acclaimed{background:var(--olive-strong);border-color:var(--olive-strong);color:#fff}
+.bd.c-good{border-color:var(--olive);color:var(--olive-text)}
+.bd.c-poor{border-color:var(--oxblood);color:var(--ox-text)}
+.bd.v-read{background:var(--oxblood);border-color:var(--oxblood);color:var(--blush)}
+.bd.v-both{background:var(--olive-strong);border-color:var(--olive-strong);color:#fff}
+.bd.v-watch{background:var(--blush);border-color:var(--blush);color:var(--ox-deep)}
+.film p{margin:0;font-size:.84rem;color:var(--muted)}
+.act[data-k="watched"][aria-pressed="true"]{background:var(--blush);border-color:var(--blush);color:var(--ox-deep)}
+
+/* tabs */
+.tabs{display:flex;gap:6px;flex-basis:100%;margin-top:4px}
+.tab{font:600 .86rem/1 var(--f-body);padding:9px 14px;border-radius:999px;border:1px solid var(--band-muted);background:transparent;color:var(--band-ink);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--blush);border-color:var(--blush);color:var(--ox-deep)}
+/* topic links on cards */
+.topics{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center;font-size:.78rem;color:var(--muted)}
+.topics>span{font:500 .64rem/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;margin-right:2px}
+.tlink{font:500 .78rem/1.2 var(--f-body);border:0;background:none;color:var(--ox-text);padding:0;cursor:pointer;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.tlink:hover{text-decoration-color:currentColor}
+.panel{max-height:min(62vh,440px);overflow:auto}
+/* map */
+.mapintro{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 24px;align-items:end;padding-block:20px 10px}
+.mapintro h2{font:650 1.4rem/1.2 var(--f-display);margin:0}
+.mapintro p{margin:4px 0 0;color:var(--muted);max-width:62ch}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);align-items:center}
+.legend i{display:inline-block;width:14px;height:10px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+.lg-era{background:var(--surface);border:1.5px solid var(--oxblood)}
+.lg-theme{background:var(--olive-soft);border:1.5px solid var(--olive)}
+.lg-arrow{width:22px!important;height:0!important;border-top:2px solid var(--ox-text);border-radius:0!important}
+.lg-share{width:22px!important;height:0!important;border-top:2px solid var(--line);border-radius:0!important}
+.mapwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;-webkit-overflow-scrolling:touch}
+.mapwrap svg{display:block;width:100%;min-width:980px;height:auto}
+.hint{display:none;font-size:.78rem;color:var(--muted);margin-top:6px}
+@media (max-width:1000px){.hint{display:block}}
+svg .ax{font:500 11px var(--f-mono);fill:var(--muted);letter-spacing:.06em}
+svg .sec{font:500 10.5px var(--f-mono);fill:var(--muted);letter-spacing:.14em}
+svg .axline{stroke:var(--line);stroke-width:1}
+svg .lk{fill:none;stroke:var(--line);transition:opacity .15s}
+svg .lk.cur{stroke:var(--ox-text);stroke-width:1.6}
+svg .lk.der{stroke-dasharray:3 4}
+svg .lk.hot{stroke:var(--oxblood);opacity:1;stroke-width:2.2}
+svg .lk.dim{opacity:.12}
+svg .ll{font:500 10px var(--f-body);fill:var(--ox-text);paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round}
+svg .ll.dim{opacity:.15}
+svg .nd{cursor:pointer;transition:opacity .15s}
+svg .nd rect{stroke-width:1.5}
+svg .nd.era rect{fill:var(--surface);stroke:var(--oxblood)}
+svg .nd.theme rect{fill:var(--olive-soft);stroke:var(--olive)}
+svg .nd .nl{font:600 12.5px var(--f-body);fill:var(--ink)}
+svg .nd .nn{font:500 10px var(--f-mono);fill:var(--muted)}
+svg .nd:hover rect{stroke-width:2.5}
+svg .nd:focus{outline:none}
+svg .nd:focus-visible rect{stroke-width:3}
+svg .nd.sel rect{fill:var(--oxblood);stroke:var(--oxblood)}
+svg .nd.sel .nl,svg .nd.sel .nn{fill:var(--blush)}
+svg .nd.near rect{stroke-width:2.5}
+svg .nd.dim{opacity:.32}
+.detail{margin:4px 0 12px;display:grid;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-height:96px}
+.detail.idle{place-content:center;color:var(--muted);text-align:center}
+.detail .acts{display:flex;gap:8px;flex-wrap:wrap}
+.btn.ghost{background:transparent;color:var(--ox-text)}
+.tbooks{margin-top:26px;scroll-margin-top:16px}
+.tbooks h3{font:650 1.25rem/1.2 var(--f-display);margin:0}
+.tbooks h3 span{color:var(--muted);font:500 .8rem var(--f-body);margin-left:8px}
+svg .bg{fill:transparent}
+.dhead{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between}
+.dhead h3{font:650 1.35rem/1.2 var(--f-display);margin:0;color:var(--ox-text)}
+.dhead .dd2{font:500 .72rem/1 var(--f-mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.detail .desc{margin:0;max-width:65ch}
+.conn{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.conn>span{font:500 .64rem/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.cchip{font:500 .8rem/1.2 var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:6px 10px;border-radius:999px;cursor:pointer}
+.cchip em{font-style:normal;color:var(--muted)}
+.cchip.theme{border-color:var(--olive)}
+.cchip.era{border-color:var(--oxblood)}
+.dbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:10px}
+.dbar b{font:650 1rem var(--f-display)}
+.btn{font:600 .84rem/1 var(--f-body);border:1px solid var(--oxblood);background:var(--oxblood);color:var(--blush);padding:9px 13px;border-radius:9px;cursor:pointer}
+.empty{padding:48px 16px;text-align:center;color:var(--muted)}
+.empty b{display:block;font:650 1.2rem var(--f-display);color:var(--ink);margin-bottom:6px}
+mark{background:var(--blush);color:var(--ox-deep);border-radius:2px;padding:0 1px}
+.foot{margin-top:24px;font-size:.78rem;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="band gut"><div class="inner">
+    <div>
+      <p class="eyebrow" id="eyebrow">68 books</p>
+      <h1>Must-Read Shelf</h1>
+      <p class="sub">The 50 books that show up most on must-read lists, plus picks like <i>This Cursed Beautiful Land</i>, Nobel laureates, great thinkers and your own picks.</p>
+    </div>
+    <div class="tally" aria-live="polite">
+      <div><b id="t-all">68</b><span>Books</span></div>
+      <div><b id="t-read">0</b><span>Read</span></div>
+      <div><b id="t-watched">0</b><span>Watched</span></div>
+      <div><b id="t-fav">0</b><span>Favourites</span></div>
+      <div><b id="t-later">0</b><span>Not right now</span></div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Views">
+      <button class="tab" role="tab" id="tab-shelf" aria-controls="v-shelf" type="button">Shelf</button>
+      <button class="tab" role="tab" id="tab-map" aria-controls="v-map" type="button">Topic map</button>
+    </nav>
+  </div></header>
+
+<div id="v-shelf" role="tabpanel" aria-labelledby="tab-shelf">
+  <div class="bar gut"><div class="inner">
+    <div class="row">
+      <label class="search" for="q">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Search title, author, topic, film, Nobel field…" autocomplete="off" aria-label="Search books">
+        <button id="qclear" type="button" aria-label="Clear search" hidden>×</button>
+      </label>
+      <div class="row" id="dds"></div>
+    </div>
+    <div class="status">
+      <div class="active"><span id="count" aria-live="polite"></span><span id="pills" class="active"></span><button class="linkbtn" id="reset" type="button" hidden>Clear all</button></div>
+      <span class="save" id="save"></span>
+    </div>
+  </div></div>
+
+  <div class="gut"><div class="inner"><main id="grid" class="grid" aria-label="Books"></main>
+  <div id="empty" class="empty" hidden><b>No books match</b>Try fewer filters or a different search.<br><button class="linkbtn" id="reset2" type="button">Clear all</button></div>
+  <p class="foot">Adaptation verdicts summarise how critics received each film or series and how closely it follows the book. Years are first publication, in the original language. Page counts are approximate and vary by edition.</p>
+</div></div>
+</div>
+
+<div id="v-map" role="tabpanel" aria-labelledby="tab-map" hidden><div class="gut"><div class="inner">
+  <div class="mapintro">
+    <div><h2>How the books connect</h2><p>Eras and places sit roughly in time order along the top; themes that run across them sit below. Hover or tap a topic to see what it links to. When you want its books, show them below or filter the shelf.</p></div>
+    <div class="legend"><span><i class="lg-era"></i>Era or place</span><span><i class="lg-theme"></i>Theme</span><span><i class="lg-arrow"></i>Leads to</span><span><i class="lg-share"></i>Share books</span></div>
+  </div>
+  <section class="detail" id="detail" aria-live="polite"></section>
+  <div class="mapwrap" id="mapwrap"></div>
+  <p class="hint">Scroll sideways to see the whole map.</p>
+  <div id="tbooks" class="tbooks" hidden><h3 id="tbooks-h"></h3></div>
+  <div class="grid" id="tgrid" aria-label="Books for this topic"></div>
+</div></div></div>
+
+<script>
+const BOOKS = [{"id": "the-great-gatsby", "rank": 1, "title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "genre": "Classic literary fiction", "shelf": "Classic fiction", "difficulty": 2, "lists": 5, "screen": "Film (2013, Leonardo DiCaprio); film (1974, Robert Redford)", "about": "A mysterious millionaire throws lavish Jazz Age parties to win back a lost love; a short, sharp take on the American Dream. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 180, "year": 1925, "film": {"pick": "The Great Gatsby (2013)", "critics": "Mixed", "faithful": "Close", "verdict": "Read the book", "note": "Follows the plot but swaps the novel's quiet melancholy for spectacle. The book is only 180 pages."}, "hasScreen": true, "topics": ["gilded", "class"]}, {"id": "1984", "rank": 2, "title": "1984", "author": "George Orwell", "genre": "Dystopian", "shelf": "Dystopian & sci-fi", "difficulty": 2, "lists": 5, "screen": "Film (1984, John Hurt)", "about": "Winston Smith rebels against a surveillance state that rewrites history and polices thought. Gave us \"Big Brother.\" ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 328, "year": 1949, "film": {"pick": "Nineteen Eighty-Four (1984)", "critics": "Good", "faithful": "Close", "verdict": "Read the book", "note": "A bleak, faithful film. The book's ideas, like Newspeak and doublethink, land far better on the page."}, "hasScreen": true, "topics": ["control", "silencing"]}, {"id": "pride-and-prejudice", "rank": 3, "title": "Pride and Prejudice", "author": "Jane Austen", "genre": "Classic romance / social comedy", "shelf": "Classic fiction", "difficulty": 3, "lists": 5, "screen": "BBC series (1995, Colin Firth); film (2005, Keira Knightley)", "about": "Witty Elizabeth Bennet and proud Mr Darcy misjudge each other in Regency England. Funnier than its reputation. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 432, "year": 1813, "film": {"pick": "Pride and Prejudice (BBC, 1995)", "critics": "Acclaimed", "faithful": "Very close", "verdict": "Both are worth it", "note": "The six-hour BBC series is famously faithful. The 2005 film is lovely but condenses a lot."}, "hasScreen": true, "topics": ["england19", "women", "class"]}, {"id": "wuthering-heights", "rank": 4, "title": "Wuthering Heights", "author": "Emily Brontë", "genre": "Gothic classic", "shelf": "Classic fiction", "difficulty": 4, "lists": 5, "screen": "Film (2026, Margot Robbie & Jacob Elordi); film (1939); film (2011)", "about": "The destructive passion of Heathcliff and Cathy poisons two families on the Yorkshire moors. Nested narrators take getting used to. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 416, "year": 1847, "film": {"pick": "Wuthering Heights (2026)", "critics": "Mixed", "faithful": "Loose", "verdict": "Read the book", "note": "Critics were split: lush and sensual, but it rewrites the story and drops the second generation."}, "hasScreen": true, "topics": ["england19"]}, {"id": "jane-eyre", "rank": 5, "title": "Jane Eyre", "author": "Charlotte Brontë", "genre": "Gothic / romance classic", "shelf": "Classic fiction", "difficulty": 3, "lists": 5, "screen": "Film (2011, Mia Wasikowska); BBC series (2006)", "about": "An orphan governess with a fierce sense of self falls for her brooding employer, who hides a terrible secret. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 532, "year": 1847, "film": {"pick": "Jane Eyre (2011)", "critics": "Good", "faithful": "Fairly close", "verdict": "Both are worth it", "note": "Well reviewed and atmospheric, but condensed. The 2006 BBC series covers more of the book."}, "hasScreen": true, "topics": ["england19", "women", "growing"]}, {"id": "frankenstein", "rank": 6, "title": "Frankenstein", "author": "Mary Shelley", "genre": "Gothic / early science fiction", "shelf": "Dystopian & sci-fi", "difficulty": 3, "lists": 5, "screen": "Film (2025, Guillermo del Toro, Netflix); film (1931, Boris Karloff)", "about": "A scientist builds a living being, abandons it, and pays the price. More about responsibility and loneliness than horror. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 280, "year": 1818, "film": {"pick": "Frankenstein (2025)", "critics": "Good", "faithful": "Loose", "verdict": "Both are worth it", "note": "Strong reviews, especially for the Creature. Keeps the novel's sympathy for him but reshapes the plot."}, "hasScreen": true, "topics": ["science"]}, {"id": "beloved", "rank": 7, "title": "Beloved", "author": "Toni Morrison", "genre": "Historical literary fiction", "shelf": "Modern literary fiction", "difficulty": 4, "lists": 5, "screen": "Film (1998, Oprah Winfrey)", "about": "A formerly enslaved woman is haunted, perhaps literally, by the daughter she lost. Pulitzer winner; nonlinear and intense. ", "tags": ["Top 50 must-reads", "Nobel laureate"], "nobel": "Literature, 1993", "link": null, "pages": 324, "year": 1987, "film": {"pick": "Beloved (1998)", "critics": "Mixed", "faithful": "Fairly close", "verdict": "Read the book", "note": "Ambitious but uneven, and hard to follow without the book. Morrison's prose is the experience."}, "hasScreen": true, "topics": ["slavery", "race"]}, {"id": "the-handmaid-s-tale", "rank": 8, "title": "The Handmaid's Tale", "author": "Margaret Atwood", "genre": "Dystopian", "shelf": "Dystopian & sci-fi", "difficulty": 2, "lists": 5, "screen": "Series (2017–2025, Hulu, Elisabeth Moss)", "about": "In a theocratic former USA, fertile women are forced to bear children for the elite. Told by one woman who remembers before. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 311, "year": 1985, "film": {"pick": "The Handmaid's Tale (2017–2025)", "critics": "Acclaimed", "faithful": "Close at first", "verdict": "Both are worth it", "note": "Season 1 tracks the novel closely and won the top Emmy; later seasons invent far beyond it."}, "hasScreen": true, "topics": ["control", "silencing", "women"]}, {"id": "the-catcher-in-the-rye", "rank": 9, "title": "The Catcher in the Rye", "author": "J.D. Salinger", "genre": "Coming-of-age", "shelf": "Modern literary fiction", "difficulty": 1, "lists": 4, "screen": "None (Salinger never allowed one)", "about": "Expelled teenager Holden Caulfield wanders New York for a few days, raging at \"phonies\" and grieving more than he admits. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 234, "year": 1951, "hasScreen": false, "topics": ["growing"]}, {"id": "crime-and-punishment", "rank": 10, "title": "Crime and Punishment", "author": "Fyodor Dostoevsky", "genre": "Psychological classic", "shelf": "Classic fiction", "difficulty": 4, "lists": 4, "screen": "Many; e.g. BBC TV film (2002, John Simm)", "about": "A poor student murders a pawnbroker to prove a theory and is then undone by guilt. A gripping cat-and-mouse with a detective. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 671, "year": 1866, "film": {"pick": "Crime and Punishment (BBC, 2002)", "critics": "Mixed", "faithful": "Fairly close", "verdict": "Read the book", "note": "A competent condensation. The novel lives inside Raskolnikov's head, which film can't reach."}, "hasScreen": true, "topics": ["tsarist", "meaning"]}, {"id": "to-kill-a-mockingbird", "rank": 11, "title": "To Kill a Mockingbird", "author": "Harper Lee", "genre": "Southern / coming-of-age", "shelf": "Modern literary fiction", "difficulty": 2, "lists": 4, "screen": "Film (1962, Gregory Peck)", "about": "Through young Scout's eyes, her lawyer father defends a Black man falsely accused in 1930s Alabama. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 336, "year": 1960, "film": {"pick": "To Kill a Mockingbird (1962)", "critics": "Acclaimed", "faithful": "Close", "verdict": "Both are worth it", "note": "One of the great adaptations; Gregory Peck won the Oscar. The book adds Scout's voice and the town."}, "hasScreen": true, "topics": ["jimcrow", "race", "growing"]}, {"id": "the-lord-of-the-rings", "rank": 12, "title": "The Lord of the Rings", "author": "J.R.R. Tolkien", "genre": "Epic fantasy", "shelf": "Fantasy & adventure", "difficulty": 3, "lists": 4, "screen": "Film trilogy (2001–2003, Peter Jackson)", "about": "Hobbits carry a ring of absolute power across Middle-earth to destroy it. Long, but the template for modern fantasy. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 1216, "year": 1954, "film": {"pick": "The Lord of the Rings (2001–2003)", "critics": "Acclaimed", "faithful": "Fairly close", "verdict": "Both are worth it", "note": "Seventeen Oscars and a superb version of the story. The book adds depth, songs and a different ending."}, "hasScreen": true, "topics": ["power", "worlds"]}, {"id": "catch-22", "rank": 13, "title": "Catch-22", "author": "Joseph Heller", "genre": "War satire", "shelf": "Modern literary fiction", "difficulty": 3, "lists": 4, "screen": "Series (2019, Hulu/George Clooney); film (1970)", "about": "A WWII bombardier tries every trick to stop flying missions, trapped by absurd military logic. Very funny, then devastating. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 453, "year": 1961, "film": {"pick": "Catch-22 (Hulu, 2019)", "critics": "Good", "faithful": "Fairly close", "verdict": "Read the book", "note": "A solid, more linear series. Much of the book's comedy is in its looping structure."}, "hasScreen": true, "topics": ["ww2", "war"]}, {"id": "the-count-of-monte-cristo", "rank": 14, "title": "The Count of Monte Cristo", "author": "Alexandre Dumas", "genre": "Adventure", "shelf": "Fantasy & adventure", "difficulty": 3, "lists": 4, "screen": "Film (2024, French); film (2002); many earlier", "about": "A sailor betrayed and jailed for years escapes, finds a fortune and plots elaborate revenge. 1,000+ pages that fly by. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 1276, "year": 1844, "film": {"pick": "The Count of Monte Cristo (2024)", "critics": "Acclaimed", "faithful": "Loose", "verdict": "Both are worth it", "note": "A lavish, well-reviewed three-hour French film that compresses and changes a lot. A great way in."}, "hasScreen": true, "topics": ["prison"]}, {"id": "one-hundred-years-of-solitude", "rank": 15, "title": "One Hundred Years of Solitude", "author": "Gabriel García Márquez", "genre": "Magical realism", "shelf": "Modern literary fiction", "difficulty": 4, "lists": 3, "screen": "Series (2024–, Netflix)", "about": "Seven generations of the Buendía family rise and fall in the mythical town of Macondo. Keep a family tree handy. ", "tags": ["Top 50 must-reads", "Nobel laureate"], "nobel": "Literature, 1982", "link": null, "pages": 417, "year": 1967, "film": {"pick": "One Hundred Years of Solitude (Netflix, 2024–)", "critics": "Good", "faithful": "Close", "verdict": "Both are worth it", "note": "Praised as faithful and beautifully made, though some critics miss the novel's magic. Part 1 covers about half."}, "hasScreen": true, "topics": ["worlds"]}, {"id": "moby-dick", "rank": 16, "title": "Moby-Dick", "author": "Herman Melville", "genre": "Adventure / philosophical", "shelf": "Classic fiction", "difficulty": 5, "lists": 3, "screen": "Film (1956, Gregory Peck)", "about": "Captain Ahab hunts the white whale that took his leg. Long detours into whaling and meaning; rewarding if patient. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 635, "year": 1851, "film": {"pick": "Moby Dick (1956)", "critics": "Good", "faithful": "Fairly close", "verdict": "Read the book", "note": "A decent adventure film that drops the digressions, which are much of what makes the book great."}, "hasScreen": true, "topics": ["meaning"]}, {"id": "anna-karenina", "rank": 17, "title": "Anna Karenina", "author": "Leo Tolstoy", "genre": "Realist classic", "shelf": "Classic fiction", "difficulty": 4, "lists": 3, "screen": "Film (2012, Keira Knightley); many earlier", "about": "A married aristocrat's affair destroys her place in Russian society, set against Levin's search for a meaningful life. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 864, "year": 1878, "film": {"pick": "Anna Karenina (2012)", "critics": "Mixed", "faithful": "Fairly close", "verdict": "Read the book", "note": "Stylish but stagey, and Levin's half of the novel is reduced to a sketch."}, "hasScreen": true, "topics": ["tsarist", "women"]}, {"id": "middlemarch", "rank": 18, "title": "Middlemarch", "author": "George Eliot", "genre": "Victorian realist", "shelf": "Classic fiction", "difficulty": 4, "lists": 3, "screen": "BBC series (1994)", "about": "The intertwined lives, marriages and ambitions of a provincial English town, centred on idealistic Dorothea Brooke. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 880, "year": 1871, "film": {"pick": "Middlemarch (BBC, 1994)", "critics": "Acclaimed", "faithful": "Close", "verdict": "Both are worth it", "note": "A faithful, well-loved series and a good way into a long novel."}, "hasScreen": true, "topics": ["england19", "women"]}, {"id": "lolita", "rank": 19, "title": "Lolita", "author": "Vladimir Nabokov", "genre": "Literary fiction", "shelf": "Modern literary fiction", "difficulty": 4, "lists": 3, "screen": "Film (1962, Stanley Kubrick); film (1997, Jeremy Irons)", "about": "A charming, monstrous narrator tries to justify his abuse of a 12-year-old. Dazzling prose; deeply disturbing subject. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 336, "year": 1955, "film": {"pick": "Lolita (1962, Kubrick)", "critics": "Good", "faithful": "Loose", "verdict": "Read the book", "note": "Censorship forced big changes. The novel's power is its unreliable, seductive voice."}, "hasScreen": true, "topics": []}, {"id": "invisible-man", "rank": 20, "title": "Invisible Man", "author": "Ralph Ellison", "genre": "Literary fiction", "shelf": "Modern literary fiction", "difficulty": 4, "lists": 3, "screen": "None", "about": "A young Black man moves from the South to Harlem and finds society refuses to see him as an individual. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 581, "year": 1952, "hasScreen": false, "topics": ["jimcrow", "race"]}, {"id": "great-expectations", "rank": 21, "title": "Great Expectations", "author": "Charles Dickens", "genre": "Victorian coming-of-age", "shelf": "Classic fiction", "difficulty": 3, "lists": 3, "screen": "Film (1946, David Lean); series (2023, FX/BBC)", "about": "Orphan Pip comes into a mysterious fortune and learns hard lessons about class, gratitude and love. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 544, "year": 1861, "film": {"pick": "Great Expectations (1946, David Lean)", "critics": "Acclaimed", "faithful": "Fairly close", "verdict": "Both are worth it", "note": "A classic of British cinema. The 2023 series is darker and much looser."}, "hasScreen": true, "topics": ["england19", "class", "growing"]}, {"id": "brave-new-world", "rank": 22, "title": "Brave New World", "author": "Aldous Huxley", "genre": "Dystopian", "shelf": "Dystopian & sci-fi", "difficulty": 2, "lists": 3, "screen": "Series (2020, Peacock)", "about": "A future society keeps everyone happy through engineering, drugs and pleasure, at the cost of freedom and meaning. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 268, "year": 1932, "film": {"pick": "Brave New World (Peacock, 2020)", "critics": "Mixed", "faithful": "Loose", "verdict": "Read the book", "note": "Updated heavily and cancelled after one season. The 268-page book is the real thing."}, "hasScreen": true, "topics": ["control"]}, {"id": "things-fall-apart", "rank": 23, "title": "Things Fall Apart", "author": "Chinua Achebe", "genre": "Postcolonial literary fiction", "shelf": "Modern literary fiction", "difficulty": 2, "lists": 3, "screen": "Film (1971); Nigerian TV series (1987)", "about": "Proud Igbo leader Okonkwo watches his world unravel as British missionaries and rule arrive. Short and powerful. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 209, "year": 1958, "film": {"pick": "Things Fall Apart (1987 series)", "critics": "Little reviewed", "faithful": "Fairly close", "verdict": "Read the book", "note": "Hard to find and little known outside Nigeria. The book is short and powerful."}, "hasScreen": true, "topics": ["colonial", "race"]}, {"id": "slaughterhouse-five", "rank": 24, "title": "Slaughterhouse-Five", "author": "Kurt Vonnegut", "genre": "Anti-war satire / sci-fi", "shelf": "Dystopian & sci-fi", "difficulty": 2, "lists": 3, "screen": "Film (1972)", "about": "Billy Pilgrim comes \"unstuck in time\" and keeps reliving the firebombing of Dresden. Dark, funny, humane. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 275, "year": 1969, "film": {"pick": "Slaughterhouse-Five (1972)", "critics": "Good", "faithful": "Fairly close", "verdict": "Read the book", "note": "Respected, but Vonnegut's narrating voice is the heart of the book and doesn't survive."}, "hasScreen": true, "topics": ["ww2", "war"]}, {"id": "little-women", "rank": 25, "title": "Little Women", "author": "Louisa May Alcott", "genre": "Family classic", "shelf": "Classic fiction", "difficulty": 2, "lists": 3, "screen": "Film (2019, Greta Gerwig); film (1994)", "about": "The four March sisters grow up during and after the Civil War, led by aspiring writer Jo. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 449, "year": 1868, "film": {"pick": "Little Women (2019)", "critics": "Acclaimed", "faithful": "Fairly close", "verdict": "Both are worth it", "note": "Greta Gerwig rearranges the timeline but keeps the spirit; widely praised."}, "hasScreen": true, "topics": ["women", "growing"]}, {"id": "charlotte-s-web", "rank": 26, "title": "Charlotte's Web", "author": "E.B. White", "genre": "Children's classic", "shelf": "Children's", "difficulty": 1, "lists": 3, "screen": "Animated film (1973); film (2006)", "about": "A clever spider saves a pig from slaughter by writing words in her web. A gentle story about friendship and death. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 192, "year": 1952, "film": {"pick": "Charlotte's Web (1973)", "critics": "Good", "faithful": "Close", "verdict": "Both are worth it", "note": "A beloved animated version. The book is a quick, lovely read anyway."}, "hasScreen": true, "topics": ["growing"]}, {"id": "the-color-purple", "rank": 27, "title": "The Color Purple", "author": "Alice Walker", "genre": "Epistolary literary fiction", "shelf": "Modern literary fiction", "difficulty": 3, "lists": 3, "screen": "Film (1985, Steven Spielberg); musical film (2023)", "about": "Celie, abused in rural Georgia, writes letters to God and slowly finds love, voice and freedom. Pulitzer winner. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 288, "year": 1982, "film": {"pick": "The Color Purple (1985)", "critics": "Good", "faithful": "Fairly close", "verdict": "Both are worth it", "note": "Eleven Oscar nominations; it softens some of the novel's harder material."}, "hasScreen": true, "topics": ["jimcrow", "race", "women"]}, {"id": "the-hitchhiker-s-guide-to-the-galaxy", "rank": 28, "title": "The Hitchhiker's Guide to the Galaxy", "author": "Douglas Adams", "genre": "Comic science fiction", "shelf": "Dystopian & sci-fi", "difficulty": 1, "lists": 3, "screen": "Film (2005); BBC series (1981)", "about": "Seconds before Earth is demolished, Arthur Dent is rescued by an alien friend and dragged across a ridiculous universe. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 224, "year": 1979, "film": {"pick": "The Hitchhiker's Guide to the Galaxy (2005)", "critics": "Mixed", "faithful": "Loose", "verdict": "Read the book", "note": "Fun but flat next to the book. The jokes are mostly in Adams's narration."}, "hasScreen": true, "topics": ["worlds"]}, {"id": "a-wrinkle-in-time", "rank": 29, "title": "A Wrinkle in Time", "author": "Madeleine L'Engle", "genre": "Children's sci-fi / fantasy", "shelf": "Children's", "difficulty": 1, "lists": 3, "screen": "Film (2018, Ava DuVernay)", "about": "Meg Murry travels through space and time to rescue her scientist father from a dark force. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 232, "year": 1962, "film": {"pick": "A Wrinkle in Time (2018)", "critics": "Poor", "faithful": "Loose", "verdict": "Read the book", "note": "Visually bold but poorly reviewed, and it changes a lot. The book is a quick read."}, "hasScreen": true, "topics": ["growing", "worlds"]}, {"id": "the-stranger", "rank": 30, "title": "The Stranger", "author": "Albert Camus", "genre": "Philosophical fiction", "shelf": "Modern literary fiction", "difficulty": 2, "lists": 3, "screen": "Film (2025, François Ozon); film (1967, Visconti)", "about": "Detached Meursault kills a man on an Algerian beach and is judged more for not crying at his mother's funeral. ", "tags": ["Top 50 must-reads", "Nobel laureate"], "nobel": "Literature, 1957", "link": null, "pages": 123, "year": 1942, "film": {"pick": "The Stranger (2025, François Ozon)", "critics": "Good", "faithful": "Close", "verdict": "Both are worth it", "note": "An elegant, well-reviewed black-and-white film that stays close. The book is only 123 pages."}, "hasScreen": true, "topics": ["meaning"]}, {"id": "dune", "rank": 31, "title": "Dune", "author": "Frank Herbert", "genre": "Science fiction", "shelf": "Dystopian & sci-fi", "difficulty": 3, "lists": 3, "screen": "Films (2021 & 2024, Denis Villeneuve); film (1984, David Lynch)", "about": "A noble heir is thrown onto a desert planet that holds the universe's most valuable resource. Politics, ecology, religion. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 688, "year": 1965, "film": {"pick": "Dune: Parts One and Two (2021, 2024)", "critics": "Acclaimed", "faithful": "Close", "verdict": "Both are worth it", "note": "Villeneuve's two films cover the novel faithfully. The book adds inner thoughts and politics."}, "hasScreen": true, "topics": ["power", "worlds"]}, {"id": "the-alchemist", "rank": 32, "title": "The Alchemist", "author": "Paulo Coelho", "genre": "Fable / inspirational", "shelf": "Fantasy & adventure", "difficulty": 1, "lists": 3, "screen": "None released", "about": "A shepherd boy follows a recurring dream from Spain to the Egyptian pyramids in search of treasure and his purpose. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 208, "year": 1988, "hasScreen": false, "topics": ["meaning"]}, {"id": "don-quixote", "rank": 33, "title": "Don Quixote", "author": "Miguel de Cervantes", "genre": "Comic picaresque", "shelf": "Classic fiction", "difficulty": 4, "lists": 2, "screen": "Many loose versions; e.g. The Man Who Killed Don Quixote (2018)", "about": "A man who has read too many chivalry tales sets out as a knight with his squire Sancho Panza. Often called the first modern novel. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 1072, "year": 1605, "film": {"pick": "The Man Who Killed Don Quixote (2018)", "critics": "Mixed", "faithful": "Very loose", "verdict": "Read the book", "note": "Inspired by the book rather than an adaptation of it."}, "hasScreen": true, "topics": ["worlds"]}, {"id": "ulysses", "rank": 34, "title": "Ulysses", "author": "James Joyce", "genre": "Modernist", "shelf": "Modern literary fiction", "difficulty": 5, "lists": 2, "screen": "Film (1967)", "about": "One ordinary day in 1904 Dublin, told through constantly shifting styles and streams of thought. The famous hardest read. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 730, "year": 1922, "film": {"pick": "Ulysses (1967)", "critics": "Mixed", "faithful": "Fairly close", "verdict": "Read the book", "note": "Selective and little seen. Ulysses is about its language, which film can't carry."}, "hasScreen": true, "topics": []}, {"id": "madame-bovary", "rank": 35, "title": "Madame Bovary", "author": "Gustave Flaubert", "genre": "Realist classic", "shelf": "Classic fiction", "difficulty": 3, "lists": 2, "screen": "Film (2014, Mia Wasikowska); many earlier", "about": "A doctor's wife, bored by provincial life and fed on romance novels, seeks escape through affairs and debt. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 329, "year": 1857, "film": {"pick": "Madame Bovary (2014)", "critics": "Mixed", "faithful": "Fairly close", "verdict": "Read the book", "note": "Handsome but flat. Flaubert's precise, ironic narration is the point."}, "hasScreen": true, "topics": ["women", "class"]}, {"id": "alice-s-adventures-in-wonderland", "rank": 36, "title": "Alice's Adventures in Wonderland", "author": "Lewis Carroll", "genre": "Children's fantasy", "shelf": "Children's", "difficulty": 1, "lists": 2, "screen": "Disney animated film (1951); film (2010, Tim Burton)", "about": "Alice follows a white rabbit into a world of nonsense logic, wordplay and mad tea parties. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 112, "year": 1865, "film": {"pick": "Alice in Wonderland (Disney, 1951)", "critics": "Good", "faithful": "Loose", "verdict": "Both are worth it", "note": "Blends both Alice books into a classic cartoon. The original is short and funnier."}, "hasScreen": true, "topics": ["worlds"]}, {"id": "lord-of-the-flies", "rank": 37, "title": "Lord of the Flies", "author": "William Golding", "genre": "Allegorical fiction", "shelf": "Modern literary fiction", "difficulty": 2, "lists": 2, "screen": "Film (1963); film (1990)", "about": "Schoolboys stranded on an island try to govern themselves and descend into savagery. ", "tags": ["Top 50 must-reads", "Nobel laureate"], "nobel": "Literature, 1983", "link": null, "pages": 224, "year": 1954, "film": {"pick": "Lord of the Flies (1963)", "critics": "Good", "faithful": "Close", "verdict": "Both are worth it", "note": "Peter Brook's stark, faithful black-and-white version."}, "hasScreen": true, "topics": ["survival", "power", "growing"]}, {"id": "gulliver-s-travels", "rank": 38, "title": "Gulliver's Travels", "author": "Jonathan Swift", "genre": "Satire", "shelf": "Classic fiction", "difficulty": 3, "lists": 2, "screen": "TV miniseries (1996, Ted Danson); film (2010, Jack Black)", "about": "A ship's surgeon visits tiny, giant and stranger peoples, each a sharp mirror of human folly. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 306, "year": 1726, "film": {"pick": "Gulliver's Travels (1996 miniseries)", "critics": "Good", "faithful": "Fairly close", "verdict": "Both are worth it", "note": "An Emmy-winning miniseries that keeps all four voyages. Skip the 2010 comedy."}, "hasScreen": true, "topics": ["worlds"]}, {"id": "their-eyes-were-watching-god", "rank": 39, "title": "Their Eyes Were Watching God", "author": "Zora Neale Hurston", "genre": "Literary fiction", "shelf": "Modern literary fiction", "difficulty": 3, "lists": 2, "screen": "TV film (2005, Halle Berry)", "about": "Janie Crawford's journey through three marriages toward her own voice in early 1900s Florida. Dialogue in dialect. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 219, "year": 1937, "film": {"pick": "Their Eyes Were Watching God (2005)", "critics": "Mixed", "faithful": "Fairly close", "verdict": "Read the book", "note": "A pleasant TV film. Hurston's language is the reason to read it."}, "hasScreen": true, "topics": ["jimcrow", "race", "women"]}, {"id": "hamlet", "rank": 40, "title": "Hamlet", "author": "William Shakespeare", "genre": "Tragedy (play)", "shelf": "Drama", "difficulty": 4, "lists": 2, "screen": "Film (1948, Laurence Olivier); film (1996, Kenneth Branagh)", "about": "A prince seeks revenge for his father's murder and is paralysed by doubt. Read with notes or alongside a performance. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 342, "year": 1603, "film": {"pick": "Hamlet (1996, Kenneth Branagh)", "critics": "Acclaimed", "faithful": "Very close", "verdict": "Watching is a fine way in", "note": "Uses the full text over four hours. Plays are written to be seen, so watching first is a great way in."}, "hasScreen": true, "topics": ["power"]}, {"id": "a-passage-to-india", "rank": 41, "title": "A Passage to India", "author": "E.M. Forster", "genre": "Literary / colonial", "shelf": "Modern literary fiction", "difficulty": 3, "lists": 2, "screen": "Film (1984, David Lean)", "about": "A false accusation against an Indian doctor exposes the gulf between British rulers and Indians in the 1920s. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 368, "year": 1924, "film": {"pick": "A Passage to India (1984)", "critics": "Acclaimed", "faithful": "Fairly close", "verdict": "Both are worth it", "note": "David Lean's last film, Oscar-winning and faithful to the story."}, "hasScreen": true, "topics": ["colonial", "race"]}, {"id": "the-age-of-innocence", "rank": 42, "title": "The Age of Innocence", "author": "Edith Wharton", "genre": "Literary / social", "shelf": "Classic fiction", "difficulty": 3, "lists": 2, "screen": "Film (1993, Martin Scorsese)", "about": "A New York gentleman engaged to the perfect fiancée falls for her unconventional cousin in rigid 1870s society. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 340, "year": 1920, "film": {"pick": "The Age of Innocence (1993)", "critics": "Acclaimed", "faithful": "Very close", "verdict": "Both are worth it", "note": "Scorsese keeps much of Wharton's narration as voiceover. One of the most faithful adaptations."}, "hasScreen": true, "topics": ["gilded", "women"]}, {"id": "fahrenheit-451", "rank": 43, "title": "Fahrenheit 451", "author": "Ray Bradbury", "genre": "Dystopian", "shelf": "Dystopian & sci-fi", "difficulty": 2, "lists": 2, "screen": "Film (1966, François Truffaut); film (2018, HBO)", "about": "A fireman whose job is burning books begins to read them, and to question everything. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 249, "year": 1953, "film": {"pick": "Fahrenheit 451 (1966, Truffaut)", "critics": "Good", "faithful": "Fairly close", "verdict": "Read the book", "note": "A respected classic that changes the ending. Skip the 2018 HBO version."}, "hasScreen": true, "topics": ["control", "silencing"]}, {"id": "animal-farm", "rank": 44, "title": "Animal Farm", "author": "George Orwell", "genre": "Political allegory", "shelf": "Modern literary fiction", "difficulty": 1, "lists": 2, "screen": "Animated film (1954)", "about": "Farm animals overthrow their farmer, then watch the pigs become the new tyrants. The Russian Revolution in 100 pages. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 141, "year": 1945, "film": {"pick": "Animal Farm (1954)", "critics": "Good", "faithful": "Fairly close", "verdict": "Read the book", "note": "The animated film changes the ending. The book is only 141 pages."}, "hasScreen": true, "topics": ["ussr", "control", "power"]}, {"id": "the-kite-runner", "rank": 45, "title": "The Kite Runner", "author": "Khaled Hosseini", "genre": "Contemporary fiction", "shelf": "Modern literary fiction", "difficulty": 2, "lists": 2, "screen": "Film (2007)", "about": "An Afghan man returns to Kabul under the Taliban to atone for betraying his childhood friend. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 371, "year": 2003, "film": {"pick": "The Kite Runner (2007)", "critics": "Good", "faithful": "Fairly close", "verdict": "Read the book", "note": "A respectful film. The book's guilt and inner life carry the emotion."}, "hasScreen": true, "topics": ["afghan", "exile", "growing"]}, {"id": "the-book-thief", "rank": 46, "title": "The Book Thief", "author": "Markus Zusak", "genre": "Historical fiction", "shelf": "Modern literary fiction", "difficulty": 2, "lists": 2, "screen": "Film (2013)", "about": "Narrated by Death, a foster girl in Nazi Germany steals books and shares them with a Jewish man hidden in the basement. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 552, "year": 2005, "film": {"pick": "The Book Thief (2013)", "critics": "Mixed", "faithful": "Fairly close", "verdict": "Read the book", "note": "Pleasant but safe. The book's narrator, Death, mostly disappears."}, "hasScreen": true, "topics": ["nazi", "ww2", "holocaust", "survival", "growing"]}, {"id": "the-brothers-karamazov", "rank": 47, "title": "The Brothers Karamazov", "author": "Fyodor Dostoevsky", "genre": "Philosophical classic", "shelf": "Classic fiction", "difficulty": 5, "lists": 2, "screen": "Film (1958, Yul Brynner); Soviet film (1969)", "about": "Three brothers and the murder of their father frame Dostoevsky's great debate on faith, doubt and free will. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 796, "year": 1880, "film": {"pick": "The Brothers Karamazov (1958)", "critics": "Mixed", "faithful": "Loose", "verdict": "Read the book", "note": "Hollywood melodrama. The novel is about the ideas, which the film drops."}, "hasScreen": true, "topics": ["tsarist", "meaning"]}, {"id": "the-diary-of-a-young-girl", "rank": 48, "title": "The Diary of a Young Girl", "author": "Anne Frank", "genre": "Memoir / diary", "shelf": "Memoir", "difficulty": 1, "lists": 2, "screen": "Film (1959); many stage and TV versions", "about": "A Jewish teenager's diary from two years hiding from the Nazis in Amsterdam. Ordinary, funny and heartbreaking. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 283, "year": 1947, "film": {"pick": "The Diary of Anne Frank (1959)", "critics": "Acclaimed", "faithful": "Fairly close", "verdict": "Read the book", "note": "An Oscar-winning film. Her own words on the page are far more powerful."}, "hasScreen": true, "topics": ["nazi", "ww2", "holocaust", "survival"]}, {"id": "the-remains-of-the-day", "rank": 49, "title": "The Remains of the Day", "author": "Kazuo Ishiguro", "genre": "Literary fiction", "shelf": "Modern literary fiction", "difficulty": 2, "lists": 2, "screen": "Film (1993, Anthony Hopkins & Emma Thompson)", "about": "An aging English butler takes a road trip and slowly realises what his loyalty and restraint have cost him. ", "tags": ["Top 50 must-reads", "Nobel laureate"], "nobel": "Literature, 2017", "link": null, "pages": 245, "year": 1989, "film": {"pick": "The Remains of the Day (1993)", "critics": "Acclaimed", "faithful": "Close", "verdict": "Both are worth it", "note": "Anthony Hopkins and Emma Thompson; one of the finest literary adaptations."}, "hasScreen": true, "topics": ["nazi", "class"]}, {"id": "midnight-s-children", "rank": 50, "title": "Midnight's Children", "author": "Salman Rushdie", "genre": "Magical realism", "shelf": "Modern literary fiction", "difficulty": 4, "lists": 2, "screen": "Film (2012, Deepa Mehta)", "about": "A boy born at the exact moment of India's independence finds his life magically bound to his nation's history. ", "tags": ["Top 50 must-reads"], "nobel": null, "link": null, "pages": 536, "year": 1981, "film": {"pick": "Midnight's Children (2012)", "critics": "Mixed", "faithful": "Fairly close", "verdict": "Read the book", "note": "Rushdie wrote the script himself, but the novel's sprawl doesn't fit in two hours."}, "hasScreen": true, "topics": ["colonial", "worlds"]}, {"id": "say-nothing", "rank": null, "title": "Say Nothing", "author": "Patrick Radden Keefe", "genre": "Narrative history / true crime", "shelf": "Nonfiction & ideas", "difficulty": 2, "lists": null, "screen": "Series (2024, Disney+/Hulu)", "about": "A mother of ten vanishes in 1972 Belfast; the search for her unlocks the whole story of the Troubles. Gripping and humane.", "tags": ["Like This Cursed Beautiful Land"], "nobel": null, "link": "https://www.publishersweekly.com/9780385521314", "pages": 464, "year": 2018, "film": {"pick": "Say Nothing (FX/Hulu, 2024)", "critics": "Acclaimed", "faithful": "Fairly close", "verdict": "Both are worth it", "note": "Widely praised; it centres the Price sisters more than the McConville investigation."}, "hasScreen": true, "topics": ["troubles", "silencing", "war"]}, {"id": "nothing-is-true-and-everything-is-possible", "rank": null, "title": "Nothing Is True and Everything Is Possible", "author": "Peter Pomerantsev", "genre": "Reportage / memoir", "shelf": "Nonfiction & ideas", "difficulty": 2, "lists": null, "screen": "None", "about": "A TV producer's vivid, often darkly funny portrait of Putin-era Moscow, from oligarchs to models to propagandists. Short.", "tags": ["Like This Cursed Beautiful Land"], "nobel": null, "link": "https://en.wikipedia.org/wiki/Nothing_Is_True_and_Everything_Is_Possible", "pages": 256, "year": 2014, "hasScreen": false, "topics": ["postsoviet", "control"]}, {"id": "prisoner", "rank": null, "title": "Prisoner", "author": "Jason Rezaian", "genre": "Prison memoir", "shelf": "Memoir", "difficulty": 2, "lists": null, "screen": "None", "about": "The closest parallel: a Washington Post reporter held 544 days in Iran's Evin prison as a diplomatic bargaining chip.", "tags": ["Like This Cursed Beautiful Land"], "nobel": null, "link": "https://www.publishersweekly.com/9780062691576", "pages": 352, "year": 2019, "hasScreen": false, "topics": ["iran", "silencing", "prison"]}, {"id": "nothing-to-envy", "rank": null, "title": "Nothing to Envy", "author": "Barbara Demick", "genre": "Narrative nonfiction", "shelf": "Nonfiction & ideas", "difficulty": 2, "lists": null, "screen": "None", "about": "Six ordinary North Koreans from one city, followed through famine and escape. Reads like a novel; you learn a country.", "tags": ["Like This Cursed Beautiful Land"], "nobel": null, "link": "https://www.kirkusreviews.com/book-reviews/barbara-demick/nothing-to-envy", "pages": 314, "year": 2009, "hasScreen": false, "topics": ["coldwar", "control", "survival", "exile"]}, {"id": "patriot", "rank": null, "title": "Patriot", "author": "Alexei Navalny", "genre": "Memoir", "shelf": "Memoir", "difficulty": 2, "lists": null, "screen": "Not the book, but related: documentary Navalny (2022, Oscar winner)", "about": "The opposition leader's posthumous memoir, written partly from the Russian prison where he died. Warm, funny, defiant.", "tags": ["Like This Cursed Beautiful Land"], "nobel": null, "link": "https://theweek.com/culture-life/books/patriot-alexei-navalny-memoir", "pages": 496, "year": 2024, "hasScreen": false, "topics": ["postsoviet", "silencing", "prison", "exile"]}, {"id": "secondhand-time", "rank": null, "title": "Secondhand Time", "author": "Svetlana Alexievich", "genre": "Oral history", "shelf": "Nonfiction & ideas", "difficulty": 3, "lists": null, "screen": "Stage versions only; her Voices from Chernobyl informed HBO's Chernobyl (2019)", "about": "The Nobel laureate's oral history of ordinary Russians living through the Soviet collapse. Best read in pieces; emotionally heavy.", "tags": ["Like This Cursed Beautiful Land", "Nobel laureate"], "nobel": "Literature, 2015", "link": "https://www.penguinrandomhouse.com/books/541184/secondhand-time-by-svetlana-alexievich/", "pages": 496, "year": 2013, "hasScreen": false, "topics": ["ussr", "postsoviet", "silencing"]}, {"id": "one-day-in-the-life-of-ivan-denisovich", "rank": null, "title": "One Day in the Life of Ivan Denisovich", "author": "Aleksandr Solzhenitsyn", "genre": "Novel", "shelf": "Modern literary fiction", "difficulty": 2, "lists": null, "screen": "Film (1970, Tom Courtenay)", "about": "One day in a Soviet labour camp, in under 200 pages. The natural next step after Gershkovich.", "tags": ["Nobel laureate", "Like This Cursed Beautiful Land"], "nobel": "Literature, 1970", "link": null, "pages": 182, "year": 1962, "film": {"pick": "One Day in the Life of Ivan Denisovich (1970)", "critics": "Good", "faithful": "Close", "verdict": "Read the book", "note": "A faithful film, but the book is only 182 pages."}, "hasScreen": true, "topics": ["ussr", "silencing", "prison", "survival"]}, {"id": "long-walk-to-freedom", "rank": null, "title": "Long Walk to Freedom", "author": "Nelson Mandela", "genre": "Memoir", "shelf": "Memoir", "difficulty": 3, "lists": null, "screen": "Film (2013, Idris Elba)", "about": "Mandela's life story, including 27 years in prison. Long but very readable.", "tags": ["Nobel laureate"], "nobel": "Peace, 1993", "link": null, "pages": 656, "year": 1994, "film": {"pick": "Mandela: Long Walk to Freedom (2013)", "critics": "Mixed", "faithful": "Fairly close", "verdict": "Read the book", "note": "Idris Elba is strong, but 27 years in prison is compressed into a few scenes."}, "hasScreen": true, "topics": ["apartheid", "prison", "survival", "race"]}, {"id": "night", "rank": null, "title": "Night", "author": "Elie Wiesel", "genre": "Memoir", "shelf": "Memoir", "difficulty": 2, "lists": null, "screen": "None", "about": "A teenager's account of surviving Auschwitz. Short and unforgettable.", "tags": ["Nobel laureate"], "nobel": "Peace, 1986", "link": null, "pages": 120, "year": 1956, "hasScreen": false, "topics": ["holocaust", "prison", "survival"]}, {"id": "thinking-fast-and-slow", "rank": null, "title": "Thinking, Fast and Slow", "author": "Daniel Kahneman", "genre": "Psychology", "shelf": "Nonfiction & ideas", "difficulty": 3, "lists": null, "screen": "None", "about": "Why our minds make predictable mistakes. Changes how you see your own decisions.", "tags": ["Nobel laureate"], "nobel": "Economics, 2002", "link": null, "pages": 499, "year": 2011, "hasScreen": false, "topics": ["science"]}, {"id": "surely-you-re-joking-mr-feynman", "rank": null, "title": "“Surely You're Joking, Mr. Feynman!”", "author": "Richard Feynman", "genre": "Memoir", "shelf": "Memoir", "difficulty": 1, "lists": null, "screen": "None", "about": "Hilarious stories from a physicist's life: safecracking, bongo drums and the atomic bomb.", "tags": ["Nobel laureate"], "nobel": "Physics, 1965", "link": null, "pages": 350, "year": 1985, "hasScreen": false, "topics": ["science"]}, {"id": "poor-economics", "rank": null, "title": "Poor Economics", "author": "Abhijit Banerjee & Esther Duflo", "genre": "Economics", "shelf": "Nonfiction & ideas", "difficulty": 3, "lists": null, "screen": "None", "about": "How poverty actually works, told through real families and experiments.", "tags": ["Nobel laureate"], "nobel": "Economics, 2019", "link": null, "pages": 303, "year": 2011, "hasScreen": false, "topics": ["class", "science"]}, {"id": "i-am-malala", "rank": null, "title": "I Am Malala", "author": "Malala Yousafzai", "genre": "Memoir", "shelf": "Memoir", "difficulty": 1, "lists": null, "screen": "Not the book, but related: documentary He Named Me Malala (2015)", "about": "The schoolgirl shot by the Taliban for wanting an education, in her own words.", "tags": ["Nobel laureate"], "nobel": "Peace, 2014", "link": null, "pages": 327, "year": 2013, "hasScreen": false, "topics": ["afghan", "silencing", "women"]}, {"id": "man-s-search-for-meaning", "rank": null, "title": "Man's Search for Meaning", "author": "Viktor Frankl", "genre": "Memoir / philosophy", "shelf": "Nonfiction & ideas", "difficulty": 2, "lists": null, "screen": "None", "about": "A psychiatrist on what kept people alive in the concentration camps. Short, and one of the most influential books of its century.", "tags": ["Thought leader"], "nobel": null, "link": null, "pages": 165, "year": 1946, "hasScreen": false, "topics": ["holocaust", "prison", "survival", "meaning"]}, {"id": "if-this-is-a-man", "rank": null, "title": "If This Is a Man", "author": "Primo Levi", "genre": "Memoir", "shelf": "Memoir", "difficulty": 2, "lists": null, "screen": "None", "about": "A chemist's precise, humane account of a year in Auschwitz.", "tags": ["Thought leader"], "nobel": null, "link": null, "pages": 192, "year": 1947, "hasScreen": false, "topics": ["holocaust", "prison", "survival"]}, {"id": "sapiens", "rank": null, "title": "Sapiens", "author": "Yuval Noah Harari", "genre": "History", "shelf": "Nonfiction & ideas", "difficulty": 2, "lists": null, "screen": "None", "about": "The whole history of humankind told as one sweeping, readable story.", "tags": ["Thought leader"], "nobel": null, "link": null, "pages": 443, "year": 2011, "hasScreen": false, "topics": ["science"]}, {"id": "the-emperor-of-all-maladies", "rank": null, "title": "The Emperor of All Maladies", "author": "Siddhartha Mukherjee", "genre": "Science / history", "shelf": "Nonfiction & ideas", "difficulty": 3, "lists": null, "screen": "Documentary series (2015, PBS, Ken Burns)", "about": "A Pulitzer-winning biography of cancer that reads like a novel.", "tags": ["Thought leader"], "nobel": null, "link": null, "pages": 571, "year": 2010, "film": {"pick": "Cancer: The Emperor of All Maladies (PBS, 2015)", "critics": "Good", "faithful": "Fairly close", "verdict": "Both are worth it", "note": "A well-made documentary series. The book goes much deeper into the history."}, "hasScreen": true, "topics": ["science"]}, {"id": "pale-blue-dot", "rank": null, "title": "Pale Blue Dot", "author": "Carl Sagan", "genre": "Science", "shelf": "Nonfiction & ideas", "difficulty": 2, "lists": null, "screen": "Not the book, but related: Sagan's Cosmos TV series (1980)", "about": "The cosmos and humanity's place in it, beautifully written.", "tags": ["Thought leader"], "nobel": null, "link": null, "pages": 429, "year": 1994, "hasScreen": false, "topics": ["science"]}, {"id": "the-suitcase", "title": "The Suitcase", "author": "Sergei Dovlatov", "genre": "Linked short stories / autofiction", "shelf": "Modern literary fiction", "difficulty": 1, "pages": 130, "year": 1986, "about": "Eight wry, very funny stories, each built around one object Dovlatov carried out of the Soviet Union into exile in 1978. Soviet absurdity through small things.", "screen": "Not the book, but related: biopic Dovlatov (2018, Aleksei German Jr.)", "tags": ["Your picks", "Like This Cursed Beautiful Land"], "link": "https://en.wikipedia.org/wiki/The_Suitcase_(novel)", "rank": null, "lists": null, "nobel": null, "hasScreen": false, "topics": ["ussr", "coldwar", "silencing", "exile"]}, {"id": "a-manual-for-living", "title": "A Manual for Living", "author": "Epictetus", "genre": "Stoic philosophy", "shelf": "Nonfiction & ideas", "difficulty": 1, "pages": 96, "year": 125, "about": "Sharon Lebell's modern rendering of the Enchiridion, the ex-slave philosopher's short handbook: focus only on what is in your control. Read it in an evening, return to it for years.", "screen": "None", "tags": ["Your picks", "Thought leader"], "link": null, "rank": null, "lists": null, "nobel": null, "hasScreen": false, "topics": ["meaning"]}, {"id": "life-and-fate", "title": "Life and Fate", "author": "Vasily Grossman", "genre": "War epic / historical fiction", "shelf": "Modern literary fiction", "difficulty": 4, "pages": 870, "year": 1980, "about": "The Battle of Stalingrad and the lives around it, from the front to the Gulag and the camps. Banned by the Soviets and smuggled out; often called the War and Peace of the 20th century.", "screen": "Russian TV series (2012, 12 episodes)", "tags": ["Your picks", "Like This Cursed Beautiful Land"], "link": null, "film": {"pick": "Life and Fate (Russia-1, 2012)", "critics": "Good", "faithful": "Fairly close", "verdict": "Both are worth it", "note": "A well-acted 12-part series that condenses the novel but keeps its spirit. English subtitles can be hard to find."}, "rank": null, "lists": null, "nobel": null, "hasScreen": true, "topics": ["ussr", "ww2", "holocaust", "control", "silencing", "survival", "war"]}, {"id": "goodbye-to-berlin", "title": "Goodbye to Berlin", "author": "Christopher Isherwood", "genre": "Semi-autobiographical novel", "shelf": "Modern literary fiction", "difficulty": 2, "pages": 208, "year": 1939, "about": "Sketches of Berlin's landladies, nightclub singers and drifters as the Nazis rise to power, observed by a young English writer who calls himself a camera.", "screen": "Cabaret (1972, Bob Fosse); I Am a Camera (1955)", "tags": ["Your picks"], "link": null, "film": {"pick": "Cabaret (1972)", "critics": "Acclaimed", "faithful": "Loose", "verdict": "Both are worth it", "note": "Eight Oscars. Based on the stage musical, it reshapes Sally Bowles and the plot; the book is quieter and sharper."}, "rank": null, "lists": null, "nobel": null, "hasScreen": true, "topics": ["nazi", "exile"]}, {"id": "plant-him-and-he-will-grow", "title": "Plant Him and He Will Grow", "author": "Andrei Rubanov", "genre": "Autobiographical prison novel", "shelf": "Modern literary fiction", "difficulty": 3, "pages": 450, "year": 2006, "about": "A young 1990s Moscow banker is jailed for financial fraud and survives years in Russian prisons, based on Rubanov's own experience. Published in English as Do Time Get Time.", "screen": "None", "tags": ["Your picks", "Like This Cursed Beautiful Land"], "link": "https://www.ryzhakov.co.uk/from-businessman-to-writer-andrei-rubanov-russian-prison/", "rank": null, "lists": null, "nobel": null, "hasScreen": false, "topics": ["postsoviet", "prison", "class"]}, {"id": "the-little-prince", "title": "The Little Prince", "author": "Antoine de Saint-Exupéry", "genre": "Fable", "shelf": "Children's", "difficulty": 1, "pages": 96, "year": 1943, "about": "A pilot stranded in the desert meets a boy from a tiny planet. A short fable about friendship, love and what grown-ups forget; written for children, mostly understood by adults.", "screen": "Animated film (2015, Mark Osborne); musical film (1974)", "tags": ["Your picks"], "link": null, "film": {"pick": "The Little Prince (2015)", "critics": "Good", "faithful": "Loose", "verdict": "Both are worth it", "note": "Wraps the story in a new tale about a girl and an old aviator; the stop-motion sections follow the book closely. The book takes an hour."}, "rank": null, "lists": null, "nobel": null, "hasScreen": true, "topics": ["meaning", "worlds"]}];
+const TOPICS = {"topics": [{"id": "slavery", "label": "Slavery in America", "dates": "1619–1865", "kind": "era", "x": 130, "y": 340, "desc": "Enslavement of Africans in the American colonies and the US, ended by the Civil War.", "books": ["beloved"]}, {"id": "tsarist", "label": "Tsarist Russia", "dates": "1800–1917", "kind": "era", "x": 330, "y": 100, "desc": "Autocracy, serfdom and religious doubt in 19th-century Russia, the world Dostoevsky and Tolstoy wrote from.", "books": ["anna-karenina", "crime-and-punishment", "the-brothers-karamazov"]}, {"id": "ussr", "label": "Soviet Union & the Gulag", "dates": "1917–1991", "kind": "era", "x": 700, "y": 100, "desc": "One-party rule from the 1917 revolution to 1991, including Stalin's terror and the Gulag labour camps.", "books": ["animal-farm", "one-day-in-the-life-of-ivan-denisovich", "life-and-fate", "the-suitcase", "secondhand-time"]}, {"id": "postsoviet", "label": "Post-Soviet Russia", "dates": "1991–today", "kind": "era", "x": 1140, "y": 100, "desc": "The chaotic 1990s, then Putin's consolidation of power, propaganda and the jailing of opponents.", "books": ["secondhand-time", "nothing-is-true-and-everything-is-possible", "patriot", "plant-him-and-he-will-grow"]}, {"id": "england19", "label": "19th-century England", "dates": "1800–1900", "kind": "era", "x": 205, "y": 180, "desc": "Rigid class, marriage and money in Regency and Victorian England.", "books": ["pride-and-prejudice", "jane-eyre", "wuthering-heights", "middlemarch", "great-expectations"]}, {"id": "gilded", "label": "Gilded & Jazz Age US", "dates": "1870–1929", "kind": "era", "x": 400, "y": 180, "desc": "New money, old money and the American Dream from the 1870s to the 1929 crash.", "books": ["the-great-gatsby", "the-age-of-innocence"]}, {"id": "nazi", "label": "Weimar & Nazi Germany", "dates": "1929–1945", "kind": "era", "x": 590, "y": 180, "desc": "Germany's slide from the Weimar Republic into Hitler's dictatorship.", "books": ["goodbye-to-berlin", "the-book-thief", "the-remains-of-the-day", "the-diary-of-a-young-girl"]}, {"id": "coldwar", "label": "Cold War dictatorships", "dates": "1945–1991", "kind": "era", "x": 1000, "y": 180, "desc": "Communist states behind the Iron Curtain and in Asia, including North Korea.", "books": ["nothing-to-envy", "the-suitcase"]}, {"id": "iran", "label": "Islamic Republic of Iran", "dates": "1979–today", "kind": "era", "x": 1150, "y": 340, "desc": "Clerical rule since the 1979 revolution, and its use of foreign prisoners as bargaining chips.", "books": ["prisoner"]}, {"id": "colonial", "label": "Empire & colonialism", "dates": "1800–1960", "kind": "era", "x": 330, "y": 260, "desc": "European rule over Africa and Asia and the struggle for independence, including India in 1947.", "books": ["things-fall-apart", "a-passage-to-india", "midnight-s-children"]}, {"id": "jimcrow", "label": "Jim Crow & civil rights", "dates": "1877–1968", "kind": "era", "x": 450, "y": 340, "desc": "Segregation and racial terror in the American South, and the fight against it.", "books": ["to-kill-a-mockingbird", "invisible-man", "the-color-purple", "their-eyes-were-watching-god"]}, {"id": "ww2", "label": "World War II", "dates": "1939–1945", "kind": "era", "x": 790, "y": 260, "desc": "The deadliest war in history, from Europe to the Pacific.", "books": ["catch-22", "slaughterhouse-five", "life-and-fate", "the-book-thief", "the-diary-of-a-young-girl"]}, {"id": "apartheid", "label": "Apartheid South Africa", "dates": "1948–1994", "kind": "era", "x": 1000, "y": 260, "desc": "Legal racial segregation in South Africa, ended by Mandela's release and the 1994 election.", "books": ["long-walk-to-freedom"]}, {"id": "afghan", "label": "Afghanistan & Pakistan", "dates": "1979–today", "kind": "era", "x": 1185, "y": 260, "desc": "Soviet invasion, civil war and Taliban rule, felt across the border in Pakistan's Swat Valley.", "books": ["the-kite-runner", "i-am-malala"]}, {"id": "holocaust", "label": "The Holocaust", "dates": "1941–1945", "kind": "era", "x": 680, "y": 340, "desc": "The Nazi genocide of six million Jews and millions of others in ghettos and camps.", "books": ["night", "if-this-is-a-man", "man-s-search-for-meaning", "the-diary-of-a-young-girl", "life-and-fate", "the-book-thief"]}, {"id": "troubles", "label": "The Troubles", "dates": "1968–1998", "kind": "era", "x": 1185, "y": 180, "desc": "Three decades of sectarian conflict in Northern Ireland.", "books": ["say-nothing"]}, {"id": "control", "label": "Totalitarian control", "dates": null, "kind": "theme", "x": 295, "y": 560, "desc": "A state that controls what people do, say and think.", "books": ["1984", "brave-new-world", "the-handmaid-s-tale", "fahrenheit-451", "animal-farm", "nothing-to-envy", "nothing-is-true-and-everything-is-possible", "life-and-fate"]}, {"id": "silencing", "label": "Silencing dissent", "dates": null, "kind": "theme", "x": 460, "y": 470, "desc": "Censorship, propaganda and punishing people who speak out.", "books": ["patriot", "1984", "fahrenheit-451", "life-and-fate", "one-day-in-the-life-of-ivan-denisovich", "prisoner", "i-am-malala", "say-nothing", "the-suitcase", "secondhand-time", "the-handmaid-s-tale"]}, {"id": "prison", "label": "Prison & captivity", "dates": null, "kind": "theme", "x": 625, "y": 560, "desc": "Unjust imprisonment, labour camps and hostages.", "books": ["the-count-of-monte-cristo", "one-day-in-the-life-of-ivan-denisovich", "long-walk-to-freedom", "prisoner", "patriot", "plant-him-and-he-will-grow", "if-this-is-a-man", "night", "man-s-search-for-meaning"]}, {"id": "survival", "label": "Survival & the will to live", "dates": null, "kind": "theme", "x": 790, "y": 470, "desc": "What keeps people going in extreme conditions.", "books": ["man-s-search-for-meaning", "night", "if-this-is-a-man", "one-day-in-the-life-of-ivan-denisovich", "nothing-to-envy", "long-walk-to-freedom", "the-diary-of-a-young-girl", "the-book-thief", "life-and-fate", "lord-of-the-flies"]}, {"id": "meaning", "label": "Morality, faith & meaning", "dates": null, "kind": "theme", "x": 955, "y": 560, "desc": "Guilt, God, free will and how to live.", "books": ["crime-and-punishment", "the-brothers-karamazov", "the-stranger", "man-s-search-for-meaning", "a-manual-for-living", "the-alchemist", "the-little-prince", "moby-dick"]}, {"id": "exile", "label": "Exile & emigration", "dates": null, "kind": "theme", "x": 460, "y": 650, "desc": "Leaving home, by choice or by force.", "books": ["the-suitcase", "the-kite-runner", "nothing-to-envy", "goodbye-to-berlin", "patriot"]}, {"id": "war", "label": "War & its absurdity", "dates": null, "kind": "theme", "x": 790, "y": 650, "desc": "War seen from the inside, often darkly funny.", "books": ["catch-22", "slaughterhouse-five", "life-and-fate", "say-nothing"]}, {"id": "power", "label": "Power & corruption", "dates": null, "kind": "theme", "x": 130, "y": 470, "desc": "How power is won, used and corrupts.", "books": ["the-lord-of-the-rings", "dune", "animal-farm", "lord-of-the-flies", "hamlet"]}, {"id": "race", "label": "Race & racism", "dates": null, "kind": "theme", "x": 1030, "y": 650, "desc": "Slavery, segregation and prejudice.", "books": ["beloved", "to-kill-a-mockingbird", "invisible-man", "the-color-purple", "their-eyes-were-watching-god", "long-walk-to-freedom", "a-passage-to-india", "things-fall-apart"]}, {"id": "women", "label": "Women's freedom", "dates": null, "kind": "theme", "x": 1190, "y": 560, "desc": "Women pushing against the limits society sets.", "books": ["pride-and-prejudice", "jane-eyre", "madame-bovary", "anna-karenina", "the-age-of-innocence", "little-women", "middlemarch", "their-eyes-were-watching-god", "the-color-purple", "the-handmaid-s-tale", "i-am-malala"]}, {"id": "class", "label": "Class & ambition", "dates": null, "kind": "theme", "x": 625, "y": 650, "desc": "Money, status and wanting more.", "books": ["the-great-gatsby", "great-expectations", "pride-and-prejudice", "the-remains-of-the-day", "poor-economics", "madame-bovary", "plant-him-and-he-will-grow"]}, {"id": "growing", "label": "Growing up", "dates": null, "kind": "theme", "x": 295, "y": 650, "desc": "Childhood, coming of age and losing innocence.", "books": ["the-catcher-in-the-rye", "to-kill-a-mockingbird", "little-women", "the-book-thief", "great-expectations", "jane-eyre", "a-wrinkle-in-time", "charlotte-s-web", "the-kite-runner", "lord-of-the-flies"]}, {"id": "worlds", "label": "Imagination & other worlds", "dates": null, "kind": "theme", "x": 130, "y": 650, "desc": "Invented worlds, fables and the magical.", "books": ["the-lord-of-the-rings", "dune", "the-hitchhiker-s-guide-to-the-galaxy", "alice-s-adventures-in-wonderland", "a-wrinkle-in-time", "gulliver-s-travels", "don-quixote", "the-little-prince", "one-hundred-years-of-solitude", "midnight-s-children"]}, {"id": "science", "label": "Science & the human mind", "dates": null, "kind": "theme", "x": 1120, "y": 470, "desc": "How we think, heal and fit into the universe.", "books": ["sapiens", "pale-blue-dot", "the-emperor-of-all-maladies", "surely-you-re-joking-mr-feynman", "thinking-fast-and-slow", "frankenstein", "poor-economics"]}], "links": [{"a": "tsarist", "b": "ussr", "label": "1917 revolution"}, {"a": "ussr", "b": "postsoviet", "label": "1991 collapse"}, {"a": "nazi", "b": "ww2", "label": "invades Poland, 1939"}, {"a": "nazi", "b": "holocaust", "label": "carries out"}, {"a": "ww2", "b": "coldwar", "label": "divides Europe"}, {"a": "ussr", "b": "ww2", "label": "Stalingrad, 1942–43"}, {"a": "slavery", "b": "jimcrow", "label": "legacy"}, {"a": "coldwar", "b": "afghan", "label": "Soviet invasion, 1979"}, {"a": "ussr", "b": "coldwar", "label": "exports its system"}, {"a": "control", "b": "silencing", "label": "enforced by"}, {"a": "silencing", "b": "prison", "label": "ends in"}, {"a": "prison", "b": "survival", "label": "tests"}, {"a": "survival", "b": "meaning", "label": "search for"}, {"a": "silencing", "b": "exile", "label": "drives into"}, {"a": "power", "b": "control", "label": "becomes"}, {"a": "war", "b": "survival", "label": "tests"}, {"a": "race", "b": "women", "label": "both fight exclusion"}], "derived": [{"a": "tsarist", "b": "meaning", "n": 2}, {"a": "ussr", "b": "control", "n": 2}, {"a": "ussr", "b": "silencing", "n": 4}, {"a": "ussr", "b": "survival", "n": 2}, {"a": "postsoviet", "b": "silencing", "n": 2}, {"a": "postsoviet", "b": "prison", "n": 2}, {"a": "england19", "b": "women", "n": 3}, {"a": "england19", "b": "class", "n": 2}, {"a": "england19", "b": "growing", "n": 2}, {"a": "nazi", "b": "survival", "n": 2}, {"a": "coldwar", "b": "exile", "n": 2}, {"a": "colonial", "b": "race", "n": 2}, {"a": "jimcrow", "b": "race", "n": 4}, {"a": "jimcrow", "b": "women", "n": 2}, {"a": "ww2", "b": "survival", "n": 3}, {"a": "ww2", "b": "war", "n": 3}, {"a": "holocaust", "b": "prison", "n": 3}, {"a": "holocaust", "b": "survival", "n": 6}]};
+const TOP = Object.fromEntries(TOPICS.topics.map(x=>[x.id,x]));
+const DIFF = {1:"Breezy",2:"Easy",3:"Moderate",4:"Challenging",5:"Hard"};
+const LEN = [["short","Short · under 250 pages",p=>p<250],["medium","Medium · 250–450",p=>p>=250&&p<=450],["long","Long · 450–700",p=>p>450&&p<=700],["epic","Very long · over 700",p=>p>700]];
+const ERA = [["pre1800","Before 1800",y=>y<1800],["1800s","1800s",y=>y>=1800&&y<1900],["1900-49","1900–1949",y=>y>=1900&&y<1950],["1950-99","1950–1999",y=>y>=1950&&y<2000],["2000s","2000 and later",y=>y>=2000]];
+const FILTERS = [
+  {key:"tags", label:"Why it's here", opts:["Top 50 must-reads","Like This Cursed Beautiful Land","Nobel laureate","Thought leader","Your picks"].map(v=>[v,v]), test:(b,v)=>b.tags.includes(v)},
+  {key:"topic", label:"Topic", opts:TOPICS.topics.map(x=>[x.id,x.label+(x.dates?` (${x.dates})`:"")]), test:(b,v)=>b.topics.includes(v)},
+  {key:"diff", label:"Difficulty", opts:[1,2,3,4,5].map(n=>[String(n),`${n} · ${DIFF[n]}`]), test:(b,v)=>b.difficulty===+v},
+  {key:"len", label:"Length", opts:LEN.map(([k,l])=>[k,l]), test:(b,v)=>LEN.find(x=>x[0]===v)[2](b.pages)},
+  {key:"era", label:"Published", opts:ERA.map(([k,l])=>[k,l]), test:(b,v)=>ERA.find(x=>x[0]===v)[2](b.year)},
+  {key:"screen", label:"On screen", opts:[["has","Has a film or series"],["acclaimed","Critics loved the adaptation"],["close","Adaptation stays close to the book"],["worth","Adaptation worth watching"],["none","No film or series"]], test:(b,v)=>{const f=b.film; if(v==="none") return !b.hasScreen; if(!f) return false; return v==="has"||(v==="acclaimed"&&f.critics==="Acclaimed")||(v==="close"&&/^(Very close|Close)/.test(f.faithful))||(v==="worth"&&f.verdict!=="Read the book");}},
+  {key:"shelf", label:"Shelf", opts:["Classic fiction","Modern literary fiction","Dystopian & sci-fi","Fantasy & adventure","Children's","Drama","Memoir","Nonfiction & ideas"].map(v=>[v,v]), test:(b,v)=>b.shelf===v},
+];
+const MARKS = [["all","All books"],["fav","Favourites"],["read","Read"],["unread","Not read yet"],["watched","Watched"],["watchednotread","Watched, not read yet"],["later","Not right now"],["hidelater","Hide not right now"]];
+const SORTS = [["rank","Most recommended"],["old","Oldest first"],["new","Newest first"],["short","Shortest first"],["long","Longest first"],["easy","Easiest first"],["hard","Hardest first"],["title","Title A–Z"],["author","Author A–Z"]];
+const LS_MARKS="shelf.marks.v1", LS_UI="shelf.ui.v2";
+
+const lsGet=k=>{try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+let marks = lsGet(LS_MARKS) || {};
+const ui = Object.assign({q:"",sort:"rank",tags:[],topic:[],diff:[],len:[],era:[],screen:[],shelf:[],mark:"all"}, lsGet(LS_UI)||{});
+const $ = id=>document.getElementById(id);
+const esc = s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const norm = s=>String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[\u2018\u2019\u201c\u201d]/g,"'");
+BOOKS.forEach(b=>{ b._hay = norm([b.title,b.author,b.genre,b.shelf,b.about,b.screen,b.tags.join(" "),b.nobel?("nobel "+b.nobel):"",DIFF[b.difficulty],b.year,b.topics.map(i=>TOP[i].label).join(" "),b.film?[b.film.pick,b.film.critics,b.film.faithful,b.film.verdict,b.film.note].join(" "):""].join(" ")); });
+const chev='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+const icon = {
+  check:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+  heart:'<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>',
+  later:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+  screen:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8"/></svg>',
+  play:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m10 9.5 4.5 2.5-4.5 2.5z" fill="currentColor"/></svg>',
+  medal:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="14" r="6"/><path d="M8.5 3 12 8l3.5-5"/></svg>'
+};
+const m = id=>marks[id]||{};
+
+/* ---- dropdowns ---- */
+function buildDropdowns(){
+  const box=$("dds");
+  FILTERS.forEach(f=>{
+    const d=document.createElement("details"); d.className="dd"; d.dataset.key=f.key;
+    d.innerHTML=`<summary id="dd-${f.key}">${esc(f.label)}<span class="ct" hidden></span>${chev}</summary><div class="panel" role="group" aria-label="${esc(f.label)}">${
+      f.opts.map(([v,l],i)=>`<label class="opt"><input type="checkbox" id="f-${f.key}-${i}" value="${esc(v)}"><span>${esc(l)}</span><span class="n">${BOOKS.filter(b=>f.test(b,v)).length}</span></label>`).join("")}</div>`;
+    d.addEventListener("change",e=>{ const v=e.target.value; const a=ui[f.key]; e.target.checked?(!a.includes(v)&&a.push(v)):a.splice(a.indexOf(v),1); update(); });
+    box.append(d);
+  });
+  const mk=document.createElement("details"); mk.className="dd right"; mk.dataset.key="mark";
+  mk.innerHTML=`<summary id="dd-mark">My marks<span class="ct" hidden></span>${chev}</summary><div class="panel" role="radiogroup" aria-label="My marks">${
+    MARKS.map(([v,l],i)=>(i===7?"<hr>":"")+`<label class="opt"><input type="radio" name="mark" id="f-mark-${v}" value="${v}"><span>${l}</span></label>`).join("")}</div>`;
+  mk.addEventListener("change",e=>{ui.mark=e.target.value; update(); mk.open=false;});
+  box.append(mk);
+  const so=document.createElement("details"); so.className="dd right"; so.dataset.key="sort";
+  so.innerHTML=`<summary id="dd-sort"><span id="sortlabel"></span>${chev}</summary><div class="panel" role="radiogroup" aria-label="Sort">${
+    SORTS.map(([v,l])=>`<label class="opt"><input type="radio" name="sort" id="f-sort-${v}" value="${v}"><span>${l}</span></label>`).join("")}</div>`;
+  so.addEventListener("change",e=>{ui.sort=e.target.value; update(); so.open=false;});
+  box.append(so);
+  document.addEventListener("click",e=>{ document.querySelectorAll(".dd[open]").forEach(d=>{ if(!d.contains(e.target)) d.open=false; }); });
+  document.addEventListener("keydown",e=>{ if(e.key==="Escape") document.querySelectorAll(".dd[open]").forEach(d=>{d.open=false; d.querySelector("summary").focus();}); });
+  box.addEventListener("toggle",e=>{ if(e.target.open) document.querySelectorAll(".dd[open]").forEach(d=>{ if(d!==e.target) d.open=false; }); },true);
+}
+function syncDropdowns(){
+  FILTERS.forEach(f=>{
+    const d=document.querySelector(`.dd[data-key="${f.key}"]`);
+    d.querySelectorAll("input").forEach(i=>i.checked=ui[f.key].includes(i.value));
+    const ct=d.querySelector(".ct"); ct.hidden=!ui[f.key].length; ct.textContent=ui[f.key].length; d.classList.toggle("on",ui[f.key].length>0);
+  });
+  const mk=document.querySelector('.dd[data-key="mark"]');
+  mk.querySelectorAll("input").forEach(i=>i.checked=i.value===ui.mark);
+  const mct=mk.querySelector(".ct"); mct.hidden=ui.mark==="all"; mct.textContent="1"; mk.classList.toggle("on",ui.mark!=="all");
+  document.querySelectorAll('.dd[data-key="sort"] input').forEach(i=>i.checked=i.value===ui.sort);
+  $("sortlabel").textContent="Sort: "+SORTS.find(s=>s[0]===ui.sort)[1];
+}
+function renderPills(){
+  const p=$("pills"); p.textContent="";
+  const add=(text,fn)=>{const b=document.createElement("button"); b.type="button"; b.className="pill"; b.innerHTML=`${esc(text)}<span aria-hidden="true">×</span>`; b.setAttribute("aria-label","Remove filter "+text); b.onclick=fn; p.append(b);};
+  FILTERS.forEach(f=>ui[f.key].forEach(v=>add(f.opts.find(o=>o[0]===v)[1],()=>{ui[f.key].splice(ui[f.key].indexOf(v),1);update();})));
+  if(ui.mark!=="all") add(MARKS.find(x=>x[0]===ui.mark)[1],()=>{ui.mark="all";update();});
+}
+
+/* ---- list ---- */
+function matches(b){
+  for(const f of FILTERS){ const sel=ui[f.key]; if(sel.length && !sel.some(v=>f.test(b,v))) return false; }
+  const x=m(b.id);
+  if(ui.mark==="fav"&&!x.fav) return false;
+  if(ui.mark==="read"&&!x.read) return false;
+  if(ui.mark==="unread"&&x.read) return false;
+  if(ui.mark==="later"&&!x.later) return false;
+  if(ui.mark==="watched"&&!x.watched) return false;
+  if(ui.mark==="watchednotread"&&!(x.watched&&!x.read)) return false;
+  if(ui.mark==="hidelater"&&x.later) return false;
+  return norm(ui.q).split(/\s+/).filter(Boolean).every(w=>b._hay.includes(w));
+}
+function sorted(list){
+  const a=list.slice(), strip=t=>t.replace(/^(the|a|an)\s+|[\u201c"]/gi,""), byT=(p,q)=>strip(p.title).localeCompare(strip(q.title));
+  const rk=b=>b.rank ?? 100+BOOKS.indexOf(b);
+  const by={rank:(p,q)=>rk(p)-rk(q), old:(p,q)=>p.year-q.year, new:(p,q)=>q.year-p.year, short:(p,q)=>p.pages-q.pages, long:(p,q)=>q.pages-p.pages,
+    easy:(p,q)=>p.difficulty-q.difficulty||rk(p)-rk(q), hard:(p,q)=>q.difficulty-p.difficulty||rk(p)-rk(q), title:byT,
+    author:(p,q)=>p.author.split(" ").pop().localeCompare(q.author.split(" ").pop())||byT(p,q)};
+  return a.sort(by[ui.sort]||by.rank);
+}
+function hl(text){
+  const s=esc(text), words=norm(ui.q).split(/\s+/).filter(w=>w.length>1);
+  if(!words.length) return s;
+  return s.replace(new RegExp("("+words.map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")+")","gi"),"<mark>$1</mark>");
+}
+function filmBlock(b){
+  const f=b.film;
+  if(!f) return `<div class="screen">${icon.screen}<span>${b.screen.startsWith("None")?"No film or series yet":hl(b.screen)}</span></div>`;
+  const cc={"Acclaimed":"c-acclaimed","Good":"c-good","Poor":"c-poor"}[f.critics]||"";
+  const vc={"Read the book":"v-read","Both are worth it":"v-both"}[f.verdict]||"v-watch";
+  const others=b.screen.split(";").length>1?` <span class="also">· other versions exist</span>`:"";
+  return `<div class="film">
+    <div class="ft">${icon.screen}<span>${hl(f.pick)}${others}</span></div>
+    <div class="badges"><span class="bd ${cc}"><b>Critics</b>${hl(f.critics)}</span><span class="bd"><b>Faithful</b>${hl(f.faithful)}</span><span class="bd ${vc}">${hl(f.verdict)}</span></div>
+    <p>${hl(f.note)}</p></div>`;
+}
+function card(b){
+  const x=m(b.id), el=document.createElement("article"); el.className="card"+(x.later?" later":"")+(x.fav?" fav":""); el.dataset.id=b.id;
+  const tags=b.tags.map(t=>`<span class="tag ${t==="Nobel laureate"?"t-nobel":t.startsWith("Like")?"t-like":t==="Thought leader"?"t-thought":t==="Your picks"?"t-mine":""}">${esc(t)}</span>`).join("");
+  const title=b.link?`<a href="${esc(b.link)}" target="_blank" rel="noopener">${hl(b.title)}</a>`:hl(b.title);
+  const bars=[1,2,3,4,5].map(i=>`<i class="${i<=b.difficulty?"on":""}"></i>`).join("");
+  const none=b.screen==="None"||b.screen==="None released";
+  el.innerHTML=`
+    <div class="cat"><span>${b.rank?`No. ${String(b.rank).padStart(2,"0")}`:"Added pick"}</span><span>${b.lists?`on ${b.lists} of 5 lists`:""}</span></div>
+    <div class="tags">${tags}</div>
+    <h2>${title}</h2>
+    <div class="author">${hl(b.author)}</div>
+    ${b.nobel?`<div class="nobel">${icon.medal}<span>Nobel Prize in ${hl(b.nobel)}</span></div>`:""}
+    <div class="meta"><span>${b.year<1000?"c. "+b.year+" AD":hl(String(b.year))}</span><span>${hl(b.genre)}</span><span>~${b.pages.toLocaleString("en")} pages</span><span class="diff" title="Difficulty ${b.difficulty} of 5"><span class="bars" aria-hidden="true">${bars}</span>${b.difficulty} · ${DIFF[b.difficulty]}</span></div>
+    <p class="about">${hl(b.about)}</p>
+    ${b.topics.length?`<div class="topics"><span>Topics</span>${b.topics.map(i=>`<button type="button" class="tlink" data-topic="${i}">${esc(TOP[i].label)}</button>`).join("")}</div>`:""}
+    ${filmBlock(b)}
+    <div class="actions">
+      <button type="button" class="act" data-k="read" aria-pressed="${!!x.read}">${icon.check}${x.read?"Read":"Mark read"}</button>
+      <button type="button" class="act" data-k="fav" aria-pressed="${!!x.fav}">${icon.heart}Favourite</button>
+      ${b.hasScreen?`<button type="button" class="act" data-k="watched" aria-pressed="${!!x.watched}">${icon.play}Watched</button>`:""}
+      <button type="button" class="act" data-k="later" aria-pressed="${!!x.later}">${icon.later}Not right now</button>
+    </div>`;
+  return el;
+}
+function counts(){
+  let r=0,f=0,l=0,w=0; for(const b of BOOKS){const x=m(b.id); if(x.read)r++; if(x.fav)f++; if(x.later)l++; if(x.watched)w++;}
+  $("t-watched").textContent=w;
+  $("t-all").textContent=BOOKS.length; $("t-read").textContent=r; $("t-fav").textContent=f; $("t-later").textContent=l;
+}
+function renderGrid(){
+  const list=sorted(BOOKS.filter(matches)), g=$("grid"); g.textContent="";
+  const frag=document.createDocumentFragment(); list.forEach(b=>frag.append(card(b))); g.append(frag);
+  $("empty").hidden=list.length>0;
+  $("count").textContent=list.length===BOOKS.length?`All ${BOOKS.length} books`:`${list.length} of ${BOOKS.length} books`;
+  const active=ui.q||FILTERS.some(f=>ui[f.key].length)||ui.mark!=="all";
+  $("reset").hidden=!active; $("qclear").hidden=!ui.q;
+}
+function update(){ lsSet(LS_UI,ui); syncDropdowns(); renderPills(); renderGrid(); counts(); }
+
+buildDropdowns();
+$("eyebrow").textContent=`${BOOKS.length} books · ${BOOKS.filter(b=>b.nobel).length} Nobel laureates · ${BOOKS.filter(b=>b.tags.includes("Your picks")).length} of your picks`;
+$("q").value=ui.q;
+$("q").addEventListener("input",e=>{ui.q=e.target.value; lsSet(LS_UI,ui); renderGrid();});
+$("qclear").onclick=()=>{ui.q="";$("q").value="";$("q").focus();update();};
+const resetAll=()=>{Object.assign(ui,{q:"",tags:[],topic:[],diff:[],len:[],era:[],screen:[],shelf:[],mark:"all"});$("q").value="";update();};
+$("reset").onclick=resetAll; $("reset2").onclick=resetAll;
+
+document.addEventListener("click",e=>{
+  const tl=e.target.closest(".tlink"); if(tl){ goTopic(tl.dataset.topic); return; }
+  const btn=e.target.closest(".card .act"); if(!btn) return;
+  const box=btn.closest(".grid").id;
+  const id=btn.closest(".card").dataset.id, k=btn.dataset.k, cur=Object.assign({},m(id));
+  cur[k]=!cur[k];
+  if(k==="later"&&cur.later) cur.fav=false;
+  if(k==="fav"&&cur.fav) cur.later=false;
+  Object.keys(cur).forEach(key=>{ if(!cur[key]) delete cur[key]; });
+  if(Object.keys(cur).length) marks[id]=cur; else delete marks[id];
+  lsSet(LS_MARKS,marks);
+  const y=window.scrollY; renderGrid(); renderTopicBooks(); counts(); window.scrollTo(0,y);
+  const again=document.querySelector(`#${box} .card[data-id="${id}"] .act[data-k="${k}"]`); if(again) again.focus({preventScroll:true});
+  queueSave();
+});
+
+/* ---- saving: your account (db) when available, this browser otherwise ---- */
+let ref=null, saving=false, dirty=false, timer=null;
+const setSave=t=>{$("save").textContent=t;};
+setSave("Saved in this browser");
+function queueSave(){ if(!ref) return; dirty=true; setSave("Saving…"); clearTimeout(timer); timer=setTimeout(flush,500); }
+async function flush(){
+  if(!ref||saving) return; saving=true;
+  while(dirty){ dirty=false;
+    try{ await ref.set({marks:JSON.parse(JSON.stringify(marks)), updated:new Date().toISOString()}); setSave("Saved to your account"); }
+    catch(e){ if(e&&e.code==="invalid_argument"){ ref=null; setSave("Saved in this browser only"); break; } setSave("Couldn't reach your account; kept in this browser"); }
+  }
+  saving=false;
+}
+(async()=>{
+  try{
+    if(!window.claude||!claude.use) return;
+    const [db,user]=await Promise.all([claude.use("db"),claude.use("user")]);
+    if(!db||!user) return;
+    const uid=await user.id(); if(!uid) return;
+    ref=db.doc("data/users/"+uid+"/shelf");
+    let first=true; const t=setTimeout(()=>setSave("Account not reachable yet; saving in this browser"),10000);
+    ref.onSnapshot(snap=>{
+      if(!snap.metadata.fromCache) clearTimeout(t);
+      if(snap.exists){
+        const d=snap.data(); if(!snap.metadata.hasPendingWrites && d && d.marks){ marks=JSON.parse(JSON.stringify(d.marks)); lsSet(LS_MARKS,marks); renderGrid(); renderTopicBooks(); counts(); }
+        if(!snap.metadata.fromCache) setSave("Saved to your account");
+      } else if(first && !snap.metadata.fromCache){
+        if(Object.keys(marks).length) queueSave(); else setSave("Saved to your account");
+      }
+      if(!snap.metadata.fromCache) first=false;
+    }, ()=>{ clearTimeout(t); ref=null; setSave("Saved in this browser only"); });
+  }catch(e){}
+})();
+
+update();
+
+/* ---- topic map ---- */
+const NS="http://www.w3.org/2000/svg", W=1320, H=700;
+let selTopic = lsGet("shelf.topic.v1"); if(!TOP[selTopic]) selTopic=null;
+const size=n=>n.kind==="era"?{w:168,h:50}:{w:150,h:40};
+function edgePt(n,tx,ty){ const {w,h}=size(n), dx=tx-n.x, dy=ty-n.y; if(!dx&&!dy) return [n.x,n.y]; const s=Math.min((w/2+4)/Math.abs(dx||1e-9),(h/2+4)/Math.abs(dy||1e-9)); return [n.x+dx*s,n.y+dy*s]; }
+function linksOf(id){
+  const out=[];
+  TOPICS.links.forEach(l=>{ if(l.a===id) out.push({other:l.b,text:l.label,dir:"out"}); if(l.b===id) out.push({other:l.a,text:l.label,dir:"in"}); });
+  TOPICS.derived.forEach(l=>{ if(l.a===id) out.push({other:l.b,text:`${l.n} shared books`,dir:"share"}); if(l.b===id) out.push({other:l.a,text:`${l.n} shared books`,dir:"share"}); });
+  return out;
+}
+function el(tag,attrs,text){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(text!=null) e.textContent=text; return e; }
+function buildMap(){
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"group","aria-label":"Topic map"});
+  const defs=el("defs",{});
+  [["ah","var(--ox-text)"],["ahh","var(--oxblood)"]].forEach(([id,c])=>{ const mk=el("marker",{id,viewBox:"0 0 10 10",refX:"9",refY:"5",markerUnits:"userSpaceOnUse",markerWidth:"11",markerHeight:"11",orient:"auto"}); mk.append(el("path",{d:"M0,1 L10,5 L0,9 L2.5,5 z",style:`fill:${c}`})); defs.append(mk); });
+  svg.append(defs);
+  const bg=el("rect",{x:0,y:0,width:W,height:H,class:"bg"}); bg.addEventListener("click",()=>selectTopic(null)); svg.append(bg);
+  // axis
+  svg.append(el("line",{x1:40,y1:48,x2:W-40,y2:48,class:"axline"}));
+  [["1600s",130],["1800s",300],["1900",480],["1950",780],["TODAY",1160]].forEach(([l,x])=>{ svg.append(el("line",{x1:x,y1:43,x2:x,y2:53,class:"axline"})); svg.append(el("text",{x,y:34,"text-anchor":"middle",class:"ax"},l)); });
+  svg.append(el("text",{x:40,y:76,class:"sec"},"ERAS & PLACES"));
+  svg.append(el("line",{x1:40,y1:405,x2:W-40,y2:405,class:"axline"}));
+  svg.append(el("text",{x:40,y:434,class:"sec"},"THEMES ACROSS TIME"));
+  const gL=el("g",{}), gT=el("g",{}), gN=el("g",{});
+  const draw=(a,b,cls,curve,label,key)=>{
+    const A=TOP[a],B=TOP[b];
+    const mx=(A.x+B.x)/2, my=(A.y+B.y)/2, dx=B.x-A.x, dy=B.y-A.y, len=Math.hypot(dx,dy)||1;
+    const cx=mx-dy/len*curve, cy=my+dx/len*curve;
+    const [x1,y1]=edgePt(A,cx,cy), [x2,y2]=edgePt(B,cx,cy);
+    const p=el("path",{d:`M${x1.toFixed(1)},${y1.toFixed(1)} Q${cx.toFixed(1)},${cy.toFixed(1)} ${x2.toFixed(1)},${y2.toFixed(1)}`,class:cls,"data-a":a,"data-b":b});
+    if(cls.includes("cur")) p.setAttribute("marker-end","url(#ah)");
+    gL.append(p);
+    if(label){ const tx=(x1+2*cx+x2)/4, ty=(y1+2*cy+y2)/4, flat=Math.abs(y2-y1)<4, side=(x2-x1)*(y2-y1)>=0?-1:1; gT.append(el("text",{x:(tx+(flat?0:side*-6)).toFixed(1),y:(ty+(flat?-8:4)).toFixed(1),"text-anchor":flat?"middle":(side<0?"start":"end"),class:"ll","data-a":a,"data-b":b},label)); }
+  };
+  TOPICS.derived.forEach(l=>{ const p=draw(l.a,l.b,"lk der",0,null); });
+  gL.querySelectorAll(".der").forEach((p,i)=>p.setAttribute("stroke-width",String(0.8+TOPICS.derived[i].n*0.5)));
+  TOPICS.links.forEach(l=>{ const A=TOP[l.a],B=TOP[l.b]; const straight=A.kind==="theme"||(A.y===B.y&&Math.abs(A.x-B.x)<260); draw(l.a,l.b,"lk cur", straight?0:18, l.label); });
+  TOPICS.topics.forEach(n=>{
+    const {w,h}=size(n), g=el("g",{class:`nd ${n.kind}`,"data-id":n.id,tabindex:"0",role:"button","aria-label":`${n.label}${n.dates?", "+n.dates:""}, ${n.books.length} books`});
+    g.append(el("rect",{x:n.x-w/2,y:n.y-h/2,width:w,height:h,rx:n.kind==="era"?9:20}));
+    if(n.dates){ g.append(el("text",{x:n.x,y:n.y-3,"text-anchor":"middle",class:"nl"},n.label)); g.append(el("text",{x:n.x,y:n.y+14,"text-anchor":"middle",class:"nn"},`${n.dates} · ${n.books.length} books`)); }
+    else { g.append(el("text",{x:n.x,y:n.y+4.5,"text-anchor":"middle",class:"nl"},n.label)); }
+    g.addEventListener("click",()=>selectTopic(selTopic===n.id?null:n.id));
+    g.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); selectTopic(selTopic===n.id?null:n.id);} });
+    g.addEventListener("mouseenter",()=>paint(n.id));
+    g.addEventListener("mouseleave",()=>paint(selTopic));
+    gN.append(g);
+  });
+  svg.append(gL,gT,gN);
+  $("mapwrap").append(svg);
+  // shrink theme labels that overflow their pill
+  const fit=()=>gN.querySelectorAll(".nd").forEach(g=>{ const r=g.querySelector("rect"), tx=g.querySelector(".nl"); try{ tx.removeAttribute("textLength"); const bw=tx.getBBox().width, rw=+r.getAttribute("width")-20; if(bw>rw){ tx.setAttribute("textLength",rw); tx.setAttribute("lengthAdjust","spacingAndGlyphs"); } }catch(e){} });
+  requestAnimationFrame(fit); try{ document.fonts.ready.then(fit); }catch(e){}
+}
+function paint(id){
+  const near=id?new Set([id, ...linksOf(id).map(l=>l.other)]):null;
+  document.querySelectorAll("#mapwrap .nd").forEach(g=>{ const i=g.dataset.id; g.classList.toggle("sel",i===id); g.classList.toggle("near",!!near&&i!==id&&near.has(i)); g.classList.toggle("dim",!!near&&!near.has(i)); g.setAttribute("aria-pressed",i===selTopic?"true":"false"); });
+  document.querySelectorAll("#mapwrap .lk,#mapwrap .ll").forEach(p=>{ const on=!!id&&(p.dataset.a===id||p.dataset.b===id); p.classList.toggle("hot",on&&p.classList.contains("lk")); p.classList.toggle("dim",!!id&&!on); if(p.classList.contains("cur")) p.setAttribute("marker-end",on?"url(#ahh)":"url(#ah)"); });
+}
+function selectTopic(id){
+  selTopic=id||null; lsSet("shelf.topic.v1",selTopic);
+  paint(selTopic); renderDetail(); renderTopicBooks();
+}
+function renderDetail(){
+  const d=$("detail");
+  if(!selTopic){ d.className="detail idle"; d.innerHTML=`<span>Select a topic on the map to see what it connects to. Nothing is filtered until you choose to.</span>`; return; }
+  const n=TOP[selTopic]; d.className="detail";
+  const conns=linksOf(n.id).map(l=>{ const o=TOP[l.other]; const rel=l.dir==="out"?`${l.text} →`:l.dir==="in"?`← ${l.text}`:l.text; return `<button type="button" class="cchip ${o.kind}" data-go="${o.id}">${esc(o.label)} <em>· ${esc(rel)}</em></button>`; }).join("");
+  const nb=n.books.length;
+  d.innerHTML=`<div class="dhead"><h3>${esc(n.label)}</h3><span class="dd2">${n.kind==="era"?"Era · "+esc(n.dates):"Theme"} · ${nb} book${nb===1?"":"s"}</span></div>
+    <p class="desc">${esc(n.desc)}</p>
+    ${conns?`<div class="conn"><span>Connected to</span>${conns}</div>`:""}
+    <div class="dbar"><div class="acts"><button type="button" class="btn" id="seeBooks">Show the ${nb} book${nb===1?"":"s"} ↓</button><button type="button" class="btn ghost" id="toShelf">Filter the shelf by this topic</button></div><button type="button" class="linkbtn" id="clearSel">Clear selection</button></div>`;
+  d.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>selectTopic(b.dataset.go));
+  $("seeBooks").onclick=()=>$("tbooks").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
+  $("toShelf").onclick=()=>{ Object.assign(ui,{q:"",tags:[],topic:[n.id],diff:[],len:[],era:[],screen:[],shelf:[],mark:"all"}); $("q").value=""; update(); location.hash="shelf"; window.scrollTo(0,0); };
+  $("clearSel").onclick=()=>selectTopic(null);
+}
+function renderTopicBooks(){
+  const g=$("tgrid"); if(!g) return; g.textContent="";
+  const n=selTopic&&TOP[selTopic]; $("tbooks").hidden=!n; if(!n) return;
+  $("tbooks-h").innerHTML=`Books on ${esc(n.label)}<span>oldest first</span>`;
+  const list=BOOKS.filter(b=>b.topics.includes(n.id)).sort((p,q)=>p.year-q.year);
+  const f=document.createDocumentFragment(); list.forEach(b=>f.append(card(b))); g.append(f);
+}
+function goTopic(id){ location.hash="topics"; showView(); selectTopic(id); window.scrollTo(0,0); }
+function showView(){
+  const map=location.hash==="#topics";
+  $("v-map").hidden=!map; $("v-shelf").hidden=map;
+  $("tab-map").setAttribute("aria-selected",map); $("tab-shelf").setAttribute("aria-selected",!map);
+}
+$("tab-shelf").onclick=()=>{ location.hash="shelf"; };
+$("tab-map").onclick=()=>{ location.hash="topics"; };
+window.addEventListener("hashchange",()=>{ showView(); });
+buildMap(); showView(); selectTopic(selTopic);
+</script>
+</body>
+</html>
