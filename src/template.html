@@ -287,7 +287,7 @@ const DIFF = {1:"Breezy",2:"Easy",3:"Moderate",4:"Challenging",5:"Hard"};
 const LEN = [["short","Short · under 250 pages",p=>p<250],["medium","Medium · 250–450",p=>p>=250&&p<=450],["long","Long · 450–700",p=>p>450&&p<=700],["epic","Very long · over 700",p=>p>700]];
 const ERA = [["pre1800","Before 1800",y=>y<1800],["1800s","1800s",y=>y>=1800&&y<1900],["1900-49","1900–1949",y=>y>=1900&&y<1950],["1950-99","1950–1999",y=>y>=1950&&y<2000],["2000s","2000 and later",y=>y>=2000]];
 const FILTERS = [
-  {key:"tags", label:"Why it's here", opts:["Top 50 must-reads","Like This Cursed Beautiful Land","Nobel laureate","Thought leader","Your picks"].map(v=>[v,v]), test:(b,v)=>b.tags.includes(v)},
+  {key:"tags", label:"Why it's here", opts:["Top 50 must-reads","Like This Cursed Beautiful Land","Nobel laureate","Thought leader","My picks"].map(v=>[v,v]), test:(b,v)=>b.tags.includes(v)},
   {key:"topic", label:"Topic", opts:TOPICS.topics.map(x=>[x.id,x.label+(x.dates?` (${x.dates})`:"")]), test:(b,v)=>b.topics.includes(v)},
   {key:"diff", label:"Difficulty", opts:[1,2,3,4,5].map(n=>[String(n),`${n} · ${DIFF[n]}`]), test:(b,v)=>b.difficulty===+v},
   {key:"len", label:"Length", opts:LEN.map(([k,l])=>[k,l]), test:(b,v)=>LEN.find(x=>x[0]===v)[2](b.pages)},
@@ -400,7 +400,7 @@ function filmBlock(b){
 }
 function card(b){
   const x=m(b.id), el=document.createElement("article"); el.className="card"+(x.later?" later":"")+(x.fav?" fav":""); el.dataset.id=b.id;
-  const tags=b.tags.map(t=>`<span class="tag ${t==="Nobel laureate"?"t-nobel":t.startsWith("Like")?"t-like":t==="Thought leader"?"t-thought":t==="Your picks"?"t-mine":""}">${esc(t)}</span>`).join("");
+  const tags=b.tags.map(t=>`<span class="tag ${t==="Nobel laureate"?"t-nobel":t.startsWith("Like")?"t-like":t==="Thought leader"?"t-thought":t==="My picks"?"t-mine":""}">${esc(t)}</span>`).join("");
   const title=b.link?`<a href="${esc(b.link)}" target="_blank" rel="noopener">${hl(b.title)}</a>`:hl(b.title);
   const bars=[1,2,3,4,5].map(i=>`<i class="${i<=b.difficulty?"on":""}"></i>`).join("");
   const none=b.screen==="None"||b.screen==="None released";
@@ -438,6 +438,10 @@ function renderGrid(){
 function update(){ lsSet(LS_UI,ui); syncDropdowns(); renderPills(); renderGrid(); counts(); }
 
 buildDropdowns();
+/* drop saved filter values that no longer exist (e.g. after a rename) */
+FILTERS.forEach(f=>{ ui[f.key]=(Array.isArray(ui[f.key])?ui[f.key]:[]).map(v=>v==="Your picks"?"My picks":v).filter((v,i,a)=>f.opts.some(o=>o[0]===v)&&a.indexOf(v)===i); });
+if(!MARKS.some(x=>x[0]===ui.mark)) ui.mark="all";
+if(!SORTS.some(x=>x[0]===ui.sort)) ui.sort="rank";
 $("q").value=ui.q;
 $("q").addEventListener("input",e=>{ui.q=e.target.value; lsSet(LS_UI,ui); renderGrid();});
 $("qclear").onclick=()=>{ui.q="";$("q").value="";$("q").focus();update();};
